@@ -10,7 +10,9 @@ certifi==2024.6.2
 cfgv==3.4.0
 charset-normalizer==3.3.2
 click==8.1.7
+dataclasses-json==0.6.6
 distlib==0.3.8
+faiss-cpu==1.8.0
 filelock==3.14.0
 frozenlist==1.4.1
 gitdb==4.0.11
@@ -20,7 +22,7 @@ google-api-core==2.19.0
 google-api-python-client==2.132.0
 google-auth==2.30.0
 google-auth-httplib2==0.2.0
-google-generativeai==0.6.0
+google-generativeai==0.5.4
 googleapis-common-protos==1.63.1
 grpcio==1.64.1
 grpcio-status==1.62.2
@@ -33,13 +35,17 @@ jsonpointer==2.4
 jsonschema==4.22.0
 jsonschema-specifications==2023.12.1
 langchain==0.2.3
+langchain-community==0.2.4
 langchain-core==0.2.5
+langchain-google-genai==1.0.6
 langchain-text-splitters==0.2.1
 langsmith==0.1.75
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
+marshmallow==3.21.3
 mdurl==0.1.2
 multidict==6.0.5
+mypy-extensions==1.0.0
 nodeenv==1.9.1
 numpy==1.26.4
 orjson==3.10.3
@@ -59,6 +65,7 @@ pydeck==0.9.1
 Pygments==2.18.0
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
+python-dotenv==1.0.1
 pytz==2024.1
 PyYAML==6.0.1
 referencing==0.35.1
@@ -75,6 +82,7 @@ toml==0.10.2
 toolz==0.12.1
 tornado==6.4.1
 tqdm==4.66.4
+typing-inspect==0.9.0
 typing_extensions==4.12.1
 tzdata==2024.1
 uritemplate==4.1.1
