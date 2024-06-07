@@ -16,4 +16,3 @@ footer {
 </style>
     """
     return css_modifier
-
