@@ -83,8 +83,11 @@ def add_new_diary_to_db_and_csv(diary_entry: Dict):
     vector_store = FAISS.load_local(
         "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
     )
+    diary_entry_copy = diary_entry.copy()
 
-    document = Document(page_content=diary_entry.pop("entry_content"), metadata=diary_entry)
+    document = Document(
+        page_content=diary_entry_copy.pop("entry_content"), metadata=diary_entry_copy
+    )
     vector_store.add_documents([document])
     vector_store.save_local("faiss_index")
     print("added to vectorstore")
