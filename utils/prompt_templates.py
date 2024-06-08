@@ -94,6 +94,11 @@ def get_topics_from_user_chat():
     prompt = PromptTemplate(template=prompt_template, input_variables=["user_chat"])
     return prompt
 
+def get_journal_query_topic_based():
+    prompt_template = """{user_chat} {topics}"""
+    prompt = PromptTemplate(template=prompt_template, input_variables=["user_chat", "topics"])
+    return prompt
+
 
 ##################################
 # Reply to User Prompt Templates #
@@ -118,10 +123,32 @@ def get_question_generation_template():
 ##################################
 
 
-def get_chatbot_system_prompt(additional_info = '- The emotions that this person experienced'):
-    return f"""
+def get_chatbot_system_prompt(additional_info = '- The emotions that this person experienced', sahha_insights = '', similar_issues = ''):
+    sahha_insights_output = ''
+    if sahha_insights:
+        sahha_insights_output = f'''
+The user's biometric insights are as follows:
+```
+{sahha_insights}
+```
+        '''.strip()
+
+    similar_issues_str = ''
+    if similar_issues:
+        similar_issues_str = f'''
+The user had previously discussed these issues, you may reference these issues in your discussion with the user:
+```
+{similar_issues}
+```
+        '''.strip()
+    
+    prompt = f"""
 You are a therapist psychologist.
+{sahha_insights_output}
+{similar_issues_str}
 
 Based on the ongoing conversations, prompt the user and ask questions to get the following information. Keep your question friendly, simple and concise:
 {additional_info}
     """.strip()
+
+    return prompt
