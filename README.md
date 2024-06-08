@@ -28,6 +28,8 @@ Refer to `requirements.txt` for dependencies to download. To download, run `pip 
 
 ## Technical Design
 
+![image](https://github.com/kenliong/sophie_diary/assets/52147112/9cf7e993-cb33-4959-8458-0c5a03bc3e4c)
+
 ### Health Indicators Retrieval
 
 Integration of Sahha API is not possible now so as aligned, we have retrieved a static json file for a given day from the Sahha team. We assume user_id to be 4 and the output is from a given day. The output data contains physiological, mental and activity signals that can inform the user's current state of health. The
