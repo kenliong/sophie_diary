@@ -1,12 +1,9 @@
 import os
 from typing import Dict
 
-import faiss
 import google.generativeai as genai
 from dotenv import load_dotenv
-from langchain import FAISS, docstore
 from langchain.chains import LLMChain
-from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import FAISS
@@ -21,7 +18,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def add_old_diary_entries_to_db(old_diary_entries: Dict):
     """
-    Add old diary entries to the vector store
+    Add old diary entries from csv to the vector store
     """
     try:
         embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
