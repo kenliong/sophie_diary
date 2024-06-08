@@ -3,39 +3,39 @@ from typing import Dict
 
 import google.generativeai as genai
 import pandas as pd
-import streamlit as st
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
-from old_diary_entries import emotions, key_topics, mental_tendencies, old_diary_entries
+from old_diary_entries import emotions, key_topics, mental_tendencies
 from utils.prompt_templates import (
     generate_emotions_template,
     generate_key_topics_template,
     generate_mental_tendencies_template,
-    generate_reflection_questions_template
+    generate_reflection_questions_template,
 )
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
+
 def generate_reflection_questions(diary_entry):
     """
-    Uses gemini to tag mental tendencies to diary entries
+    Uses gemini to generate reflection questions to diary entries
     """
     entry_content = diary_entry["entry_content"]
     model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
-    prompt_template = generate_mental_tendencies_template()
-    prompt_template.format(entry_content=entry_content, mental_tendencies=mental_tendencies)
+    prompt_template = generate_reflection_questions_template()
+    prompt_template.format(entry_content=entry_content)
     chain = LLMChain(llm=model, prompt=prompt_template)
-    inputs = {"entry_content": entry_content, "mental_tendencies": mental_tendencies}
+    inputs = {"entry_content": entry_content}
     response = chain.run(inputs)
 
-    return response    
-    
-    
+    return response
+
+
 def generate_mental_tendencies(diary_entry):
     """
     Uses gemini to tag mental tendencies to diary entries
@@ -85,7 +85,7 @@ def generate_analytics_old_entries(diary_entry: Dict):
     emotions = generate_emotions(diary_entry)
     key_topics = generate_key_topics(diary_entry)
     mental_tendencies = generate_mental_tendencies(diary_entry)
-    #add reflt
+    # add reflt
 
     return emotions, key_topics, mental_tendencies
 
@@ -94,7 +94,7 @@ def add_new_diary_to_db_and_csv(diary_entry: Dict):
     """
     Add new diary entries to the vector store and csv file
     """
-    csv_data = pd.read_csv("data/journal_entries_v2.csv")
+    csv_data = pd.read_csv("data/journal_entries_v4.csv")
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     vector_store = FAISS.load_local(
         "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True

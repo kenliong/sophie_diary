@@ -1,6 +1,6 @@
 import streamlit as st
 
-from agent_chain import *
+from agent_chain import chat_with_user, get_llm_chat_instance
 
 
 ## Streamlit related functions ##
