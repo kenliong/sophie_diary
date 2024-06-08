@@ -36,7 +36,7 @@ Sophie's Diary offers personalized insights that are refined over time. Leveragi
 1. Refer to `requirements.txt` for dependencies to download. To download, run `pip install -r requirements.txt`
 2. Create a `.env` file to store the `GOOGLE_API_KEY`. The Gemini model is used.
 
-### Usage
+### User journey
 
 1. Start the application with `streamlit run main.py`
 2. Begin by talking about how you feel or what happened today.
@@ -89,6 +89,12 @@ Upon completion of the chat, chat data and metadata are processed into Diary Ana
 - Key Topics
 - Mental Tendencies
 - Reflection Questions
+
+### Some engineering considerations:
+
+1. UUID was used to uniquely tag each journal entry
+2. Datetime data is collected at the moment a diary entry is completed and stored as part of the metadata, adding chronology and enabling potential analysis of user behavior over time.
+3. Simple and intuitive design
 
 ### Long Term Storage
 
