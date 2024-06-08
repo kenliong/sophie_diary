@@ -29,7 +29,7 @@ Sophie's Diary offers personalized insights that are refined over time. Leveragi
    - A heatmap displaying the user's emotions over time.
    - Flags for traits indicating lack of sleep or activity, based on Sahha's health definitions.
 
-## Getting Started
+## Getting started
 
 ### Prerequisites
 
@@ -64,13 +64,13 @@ Integration of the Sahha API is currently not possible. As a temporary solution,
 
 ![image](https://github.com/kenliong/sophie_diary/assets/52147112/4530412d-3cfc-4aa5-af19-d0676fd2c156)
 
-Chat Loop does a bunch of things:
+Chat loop does a bunch of things:
 
-1. Initiating the Conversation: The user starts a conversation with the AI therapist, talking about anything they have in mind or responding to a prompt if they don't have a specific topic.
+1. Initiating the conversation: The user starts a conversation with the AI therapist, talking about anything they have in mind or responding to a prompt if they don't have a specific topic.
 
-2. Message Evaluation: Each user message is evaluated to understand their emotional state and assess progress towards feeling better or more satisfied (desired state).
+2. Message evaluation: Each user message is evaluated to understand their emotional state and assess progress towards feeling better or more satisfied (desired state).
 
-   - Desired State Check: The AI therapist continuously evaluates whether the user feels better or has gotten what they wanted from the conversation. Once the user has reached their desired state, it proceeds to store the diary analytics into the relational database AND vector store (FAISS). This data will be used in subsequent steps for a similarity search to provide context for future conversations.
+   - Desired state check: The AI therapist continuously evaluates whether the user feels better or has gotten what they wanted from the conversation. Once the user has reached their desired state, it proceeds to store the diary analytics into the relational database AND vector store (FAISS). This data will be used in subsequent steps for a similarity search to provide context for future conversations.
    - Else, the conversation continues.
 
 3. Conversation is ongoing: A variety of data sources are used to construct a valid response by the Therapist LLM:
@@ -81,7 +81,7 @@ Chat Loop does a bunch of things:
 
 4. Personalized responses: The Response Constructor aggregates the data from various sources and makes a call to the LLM, optimizing prompts using LangChain chains. This involves RAG techniques on the vector database, which includes past diary entries, metadata, and Sahha API data. The constructed response is then sent back to the user, looping back to Step 2 for continuous evaluation.
 
-### Real-time diary Analytics
+### Real-time diary analytics
 
 Upon completion of the chat, chat data and metadata are processed into Diary Analytics that can be stored in the Vector Data Store and Relational Database Store (currently CSV). Using LangChain and advanced prompt techniques, we extract the following attributes from a single diary entry:
 
