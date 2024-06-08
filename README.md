@@ -4,5 +4,5 @@
 
 ```
 pip install -r requirements.txt
-streamlit run chatbot.py
+streamlit run main.py
 ```
