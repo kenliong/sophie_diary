@@ -34,6 +34,7 @@ def format_docs(docs, sims):
     '''
     This function takes in a list of Langchain Documents and outputs a dictionary
     '''
+    #TODO: update filter to remove unecessary metadata
     db_context_string = {}
     for i in range(len(docs)):
         if len(docs) == 0:
