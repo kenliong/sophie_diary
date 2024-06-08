@@ -1,8 +1,11 @@
 import os
 import uuid
 
-# import streamlit as st
+from langchain_community.vectorstores import FAISS
+from langchain_core.documents import Document
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
+from diary_analytics import generate_analytics_new_entry
 from new_diary_entry import *
 from old_diary_entries import old_diary_entries
 from utils.llm_utils import *
@@ -10,9 +13,6 @@ from utils.prompt_templates import *
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-from old_diary_entries import old_diary_entries
-from new_diary_entry import *
-import uuid
 
 
 def add_old_diary_entries_to_db(old_diary_entries: Dict):
@@ -26,7 +26,7 @@ def add_old_diary_entries_to_db(old_diary_entries: Dict):
         for _, diary_entry in old_diary_entries.iterrows():
             list_of_documents.append(
                 Document(
-                    page_content=diary_entry["entry_desc"],
+                    page_content=diary_entry["entry_content"],
                     metadata=dict(
                         entry=diary_entry["entry"],
                         date=diary_entry["entry_date"],
@@ -42,47 +42,6 @@ def add_old_diary_entries_to_db(old_diary_entries: Dict):
         }
     except Exception as e:
         return {"status": "failure", "message": f"An error occurred: {str(e)}"}
-
-
-def format_diary_entry(diary_entry):
-    """
-    Format diary entry for vector store
-    """
-    # diary_entry_path = "test_diary.txt"
-    # diary_entry = TextLoader(diary_entry_path).load()
-    diary_with_metadata = {
-        "metadata": [{"date": diary_entry["entry_date"]}, {"title": diary_entry["entry_title"]}],
-        "diary_content": diary_entry["entry_content"],
-    }
-    return diary_with_metadata
-
-
-def add_new_diary_to_db(diary_entry: Dict):
-    """
-    'dairy_entry': should be a path to a .txt file
-    Add new diary entries to the vector store
-    If vector store already exists, add new entries to it
-    Otherwise, create a new vector store
-    """
-
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    vector_store = FAISS.load_local(
-        "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
-    )
-
-    formatted_diary_entry = format_diary_entry(diary_entry)
-    vector_store.add_documents(
-        documents=formatted_diary_entry["diary_content"],
-        metadatas=formatted_diary_entry["metadata"],
-    )
-
-    results = vector_store.asimilarity_search(formatted_diary_entry["diary_content"], top_k=1)
-    for result in results:
-        print(f"Diary content: {result['text']}")
-        print(f"Metadata: {result['metadata']}")
-
-    vector_store.save_local("faiss_index")
-    return vector_store
 
 
 def generate_initial_prompts():
@@ -155,7 +114,7 @@ def get_llm_chat_instance():
     return chat
 
 
-def chat_with_user(user_msg, chat_model, output_complete_flag):
+def chat_with_user(user_msg, chat_model):
     """
     Takes a user message, creates a response. Will add logic steps to steer the conversation where needed.
     """
@@ -170,15 +129,14 @@ def chat_with_user(user_msg, chat_model, output_complete_flag):
         # currently we are running this sequentially. Potentially to run this in the "background"
         conversation_labels = extract_info_from_conversation(chat_history)
         if check_conversation_labels(conversation_labels):
-            # add to vectorstore
             diary_entry_summary = summarize_new_entry(chat_model)
             output_dict = prepare_output_dict(conversation_labels, diary_entry_summary)
-            output_complete_flag = "True"
-            return "All values collected.", output_dict, output_complete_flag
+            generate_analytics_new_entry(output_dict)
+            return "All values collected.", output_dict
 
     response = chat_model.send_message(user_msg)
 
-    return response.text, conversation_labels.model_dump(), output_complete_flag
+    return response.text, conversation_labels.model_dump()
 
 
 def get_user_inputs_from_chat_model(chat_model, user_msg=""):

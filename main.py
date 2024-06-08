@@ -27,7 +27,6 @@ elif new_entry_submit:
 
 if st.session_state["conversation_labels"]:
     st.write(st.session_state["conversation_labels"])
-    st.write("this is the output complete flag", st.session_state["output_complete_flag"])
 
 if st.session_state["explore_further_enabled"]:
     chat_history_box = st.container()
@@ -40,9 +39,7 @@ if st.session_state["explore_further_enabled"]:
     if prompt:
         st.chat_message("user").write(prompt)
 
-        response, conversation_labels = chat_with_user(
-            prompt, st.session_state["chat_model"], st.session_state["output_complete_flag"]
-        )
+        response, conversation_labels = chat_with_user(prompt, st.session_state["chat_model"])
 
         st.session_state["conversation_labels"] = conversation_labels
 

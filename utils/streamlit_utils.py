@@ -27,8 +27,6 @@ def load_resources():
         st.session_state["explore_further_enabled"] = False
     if "conversation_labels" not in st.session_state:
         st.session_state["conversation_labels"] = None
-    if "output_complete_flag" not in st.session_state:
-        st.session_state["output_complete_flag"] = {"state": "False", "output_dict": {}}
 
     return
 
@@ -40,9 +38,7 @@ def enable_explore_further():
 
     chat_model = get_llm_chat_instance()
     st.session_state["chat_model"] = chat_model
-    starting_message, conversation_labels, _ = chat_with_user(
-        initial_entry, chat_model, st.session_state["output_complete_flag"]
-    )
+    starting_message, conversation_labels = chat_with_user(initial_entry, chat_model)
 
     st.session_state["conversation_labels"] = conversation_labels
 

@@ -13,9 +13,6 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.output_parsers import CommaSeparatedListOutputParser, PydanticOutputParser
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import TextLoader
-from langchain_community.vectorstores import FAISS
-from langchain_core.documents import Document
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from utils.prompt_templates import *
 from parse_sahha_score import main
@@ -34,8 +31,8 @@ def get_db_context(user_chat, model):
     return db_context_string
 
 def get_llm_instance():
-    model = genai.GenerativeModel('gemini-1.5-flash')
-    #model = genai.GenerativeModel("gemini-1.0-pro")
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    # model = genai.GenerativeModel("gemini-1.0-pro")
     return model
 
 

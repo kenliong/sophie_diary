@@ -30,6 +30,18 @@ def generate_reflection_questions():
     prompt = PromptTemplate(template=prompt_template, input_variables=["entry_content"])
     return
 
+def generate_mental_tendencies_template():
+    prompt_template = """
+    Based on the content from this diary entry, can you tag it with the relevant mental tendencies?
+    This is the diary entry: {entry_content}.
+    This is the list of mental tendencies that you can tag from: {mental_tendencies}
+    """
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["entry_content", "mental_tendencies"]
+    )
+    return prompt
+
+
 def generate_emotions_template():
     prompt_template = """
     Based on the content from this diary entry, can you tag it with the relevant emotions?
@@ -88,7 +100,7 @@ def get_topics_from_user_chat():
 ##################################
 
 
-def get_question_generation_template():    
+def get_question_generation_template():
     prompt_template = """
     You are a pen pal for a friend who has been struggling with their mental health.
     Based on the following past diary entries, generate 5 relevant questions to prompt your friend to start journalling.

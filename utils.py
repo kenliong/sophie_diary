@@ -37,9 +37,7 @@ def enable_explore_further():
 
     chat_model = get_llm_chat_instance()
     st.session_state["chat_model"] = chat_model
-    starting_message = chat_with_user(
-        initial_entry, chat_model, st.session_state["output_complete_flag"]
-    )
+    starting_message = chat_with_user(initial_entry, chat_model)
 
     # pass the entry to start the conversation
 
