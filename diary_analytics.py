@@ -110,7 +110,7 @@ def add_new_diary_to_db_and_csv(diary_entry: Dict):
 
     new_row_in_csv = len(csv_data)
     csv_data.loc[new_row_in_csv] = diary_entry
-    csv_data.to_csv("data/journal_entries_v2.csv", index=False)
+    csv_data.to_csv("data/journal_entries_v4.csv", index=False)
     print("added to csv")
 
 
