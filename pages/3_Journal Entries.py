@@ -43,5 +43,5 @@ with col2:
     st.write(selected_entry['emotions'])
     st.subheader("Key Topics")
     st.write(selected_entry['key_topics'])
-    st.subheader("Reflective Questions")
-    st.write(selected_entry['reflective_questions'])
+    st.subheader("Reflection Questions")
+    st.write(selected_entry['reflection_questions'])
