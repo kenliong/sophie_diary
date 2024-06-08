@@ -92,7 +92,7 @@ Upon completion of the chat, chat data and metadata are processed into Diary Ana
 
 ### Some engineering considerations:
 
-1. UUID was used to uniquely tag each journal entry
+1. UUID is used to uniquely tag each journal entry
 2. Datetime data is collected at the moment a diary entry is completed and stored as part of the metadata, adding chronology and enabling potential analysis of user behavior over time.
 3. Simple and intuitive design
 
