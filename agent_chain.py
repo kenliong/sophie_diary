@@ -13,7 +13,6 @@ from old_diary_entries import old_diary_entries
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-
 def initialize_vector_store(old_diary_entries: list):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     vector_store = FAISS.from_texts(old_diary_entries, embedding=embeddings)
@@ -26,6 +25,7 @@ def initialize_vector_store(old_diary_entries: list):
 
 def add_diary_to_vector_store(diary_entry: str):
     """
+    'dairy_entry': should be a path to a .txt file 
     Add new diary entries to the vector store
     If vector store already exists, add new entries to it
     Otherwise, create a new vector store
@@ -33,7 +33,7 @@ def add_diary_to_vector_store(diary_entry: str):
 
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     if os.path.exists("faiss_index"):
-        vector_store = FAISS.load_local("faiss_index")
+        vector_store = FAISS.load_local("faiss_index",embeddings=embeddings,allow_dangerous_deserialization=True)
     else:
         vector_store = FAISS(embeddings=embeddings)
 
