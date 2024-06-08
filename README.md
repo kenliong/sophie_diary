@@ -41,8 +41,8 @@ Sophie's Diary offers personalized insights that are refined over time. Leveragi
 1. Start the application with `streamlit run main.py`
 2. Begin by talking about how you feel or what happened today.
 3. Click 'Submit'
-4. Interact with the Therapist LLM to discuss your feelings & desired emotional state
-5. After completing your journal entry, view the updated insights on your dashboard alongside personal actionable steps that you can take to improve yor health.
+4. Interact with the Therapist LLM to discuss your feelings & desired emotional state. Once the Therapist LLM has gathered sufficient information, it will respond: "Thanks for sharing! You've finished your reflection and submitted a new diary entry" and a new journal entry would be added.
+5. You can now explore the updated insights on your dashboard alongside personal actionable steps that you can take to improve yor health.
 
 ### IMPORTANT NOTE:
 
