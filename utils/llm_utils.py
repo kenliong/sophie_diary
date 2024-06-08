@@ -47,17 +47,13 @@ async def async_get_completion(model, prompt):
     return response.text
 
 
-def retrieve_sahha_insights(date_time, user_id):
+def get_sahha_insights(date_time, user_id):
     """
     Integration of Sahha API is not possible now so as aligned, we have retrieved a static json file
     for a given day from the Sahha team. We assume user_id to be 4 and the output is from a given day.
     """
     user_id = 4 #hard-coded
-
-
     random_user_json, dic = main()
-
-
 
     with open('data/sahha_metadata_flatten.json') as f:
         md = json.load(f)

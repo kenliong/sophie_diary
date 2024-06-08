@@ -6,6 +6,10 @@ from wordcloud import WordCloud
 import plotly.express as px
 import plotly.graph_objects as go
 from textblob import TextBlob
+from utils.llm_utils import get_sahha_insights
+
+
+sahha_prompt, well_being_score = get_sahha_insights(1,1)
 
 # Load the data
 file_path = 'data/journal_entries_v4.csv'
@@ -29,10 +33,10 @@ st.title("Journal Entries Analytics")
 # Display number of journal entries and latest journal entry date
 num_entries = len(data)
 latest_entry_date = data['entry_date'].max().strftime('%B %d, %Y')
-col1, col2 = st.columns(2)
-col1.metric("Number of Journal Entries", num_entries)
-col2.metric("Latest Journal Entry Date", latest_entry_date)
-
+col1, col2, col3 = st.columns(3)
+col1.metric("Well Being Score (Powered by Sahha)", well_being_score)
+col2.metric("Number of Journal Entries", num_entries)
+col3.metric("Latest Journal Entry Date", latest_entry_date)
 
 # Most common emotions
 st.header("Most Common Emotions")
