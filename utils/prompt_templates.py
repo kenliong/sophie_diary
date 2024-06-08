@@ -22,6 +22,13 @@ result = chain.run({"context": context})
 # Chat to Metadata Prompt Templates #
 ####################################
 
+def generate_reflection_questions():
+    prompt_template = """
+    This is the diary entry: {entry_content}.
+    Recommend me 3 questions to reflect upon to improve this situation. 
+    """
+    prompt = PromptTemplate(template=prompt_template, input_variables=["entry_content"])
+    return
 
 def generate_mental_tendencies_template():
     prompt_template = """
@@ -60,14 +67,15 @@ def generate_key_topics_template():
 ##################################
 # Journal Query Prompt Templates #
 ##################################
-def prompt_on_docs():
-    prompt_template = """
-        Here is some context of past journal entries {docs}
-        Here is my long term development plan {ltdp}
-        How do you feel about this?
-    """
-    prompt = PromptTemplate(template=prompt_template, input_variables=["docs"])
-    return prompt
+
+# def prompt_on_docs():
+#     prompt_template = """
+#         Here is some context of past journal entries {docs}
+#         Here is my long term development plan {ltdp}
+#         How do you feel about this?
+#     """
+#     prompt = PromptTemplate(template=prompt_template, input_variables=["docs"])
+#     return prompt
 
 def get_chat_starting_question():
     prompt_template = """
@@ -84,11 +92,6 @@ def get_topics_from_user_chat():
         Provide a simple list of single words. No preamble.
         """
     prompt = PromptTemplate(template=prompt_template, input_variables=["user_chat"])
-    return prompt
-
-def get_journal_query_topic_based():
-    prompt_template = """{user_chat} {topics}"""
-    prompt = PromptTemplate(template=prompt_template, input_variables=["user_chat","topics"])
     return prompt
 
 
