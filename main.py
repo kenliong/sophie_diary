@@ -39,7 +39,7 @@ if st.session_state["explore_further_enabled"]:
     if prompt:
         st.chat_message("user").write(prompt)
 
-        response, conversation_labels = chat_with_user(prompt, st.session_state["chat_model"])
+        response, conversation_labels = chat_with_user(prompt)
 
         st.session_state["conversation_labels"] = conversation_labels
 

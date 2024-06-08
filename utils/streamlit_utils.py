@@ -1,7 +1,7 @@
 import streamlit as st
 
 from agent_chain import chat_with_user, get_llm_chat_instance
-
+from utils.prompt_templates import get_chatbot_system_prompt
 
 ## Streamlit related functions ##
 def get_custom_css_modifier():
@@ -36,9 +36,9 @@ def enable_explore_further():
 
     initial_entry = st.session_state["new_entry_text"]
 
-    chat_model = get_llm_chat_instance()
+    chat_model = get_llm_chat_instance(get_chatbot_system_prompt())
     st.session_state["chat_model"] = chat_model
-    starting_message, conversation_labels = chat_with_user(initial_entry, chat_model)
+    starting_message, conversation_labels = chat_with_user(initial_entry)
 
     st.session_state["conversation_labels"] = conversation_labels
 

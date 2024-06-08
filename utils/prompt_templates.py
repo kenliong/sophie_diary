@@ -118,12 +118,10 @@ def get_question_generation_template():
 ##################################
 
 
-def get_chatbot_system_prompt():
-    return """
-You are a therapist psychologist, and you have ability like Chris Voss, the FBI hostage negotiator, who labels what this person is going through.
+def get_chatbot_system_prompt(additional_info = '- The emotions that this person experienced'):
+    return f"""
+You are a therapist psychologist.
 
-Based on the ongoing conversations, prompt the user and ask questions to get the following information:
-1. The emotions that this person experienced
-2. The current state (or real outcome) that this person experienced
-3. The desired state (or desired outcome, expectation) that this person expected.
+Based on the ongoing conversations, prompt the user and ask questions to get the following information. Keep your question friendly, simple and concise:
+{additional_info}
     """.strip()
