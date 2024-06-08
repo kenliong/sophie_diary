@@ -45,10 +45,10 @@ def check_conversation_labels(conversation_labels):
 
 class DiaryEntrySummary(BaseModel):
     entry_title: str = Field(
-        description="Summarize this person's desired state with a goal of understanding this person's value. Turn this person's value into the title."
+        description="Summarize this person's desired state with a goal of understanding this person's value. Turn this person's value into the title. Write this in first person perspective."
     )
     entry_summary: str = Field(
-        description="A 1 to 2 paragraph summary of the user's experience based on the conversation history between the user and an AI model."
+        description="A 1 to 2 paragraph summary of the user's experience based on the conversation history between the user and an AI model. Write this in first person perspective."
     )
 
 def summarize_new_entry(chat_model):

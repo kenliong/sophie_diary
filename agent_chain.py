@@ -46,7 +46,7 @@ def format_diary_entry(diary_entry):
     #diary_entry_path = "test_diary.txt"
     #diary_entry = TextLoader(diary_entry_path).load()
     diary_with_metadata = {
-        "metadata": [{"date": diary_entry["datetime"]}, {"title": diary_entry["entry_title"]}],
+        "metadata": [{"date": diary_entry["entry_date"]}, {"title": diary_entry["entry_title"]}],
         "diary_content": diary_entry["entry_content"],
     }
     return diary_with_metadata

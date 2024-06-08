@@ -21,7 +21,7 @@ chain = LLMChain(llm=model, prompt=prompt)
 result = chain.run({"context": context})
 '''
 ####################################
-# DIARY ANALYTICS TEMPLATES #
+# Chat to Metadata Prompt Templates #
 ####################################
 
 
@@ -51,7 +51,7 @@ def get_journal_query_topic_based():
 ##################################
 
 
-def get_question_generation_template():
+def get_question_generation_template():    
     prompt_template = """
     You are a pen pal for a friend who has been struggling with their mental health.
     Based on the following past diary entries, generate 5 relevant questions to prompt your friend to start journalling.
@@ -77,7 +77,4 @@ Based on the ongoing conversations, prompt the user and ask questions to get the
 1. The emotions that this person experienced
 2. The current state (or real outcome) that this person experienced
 3. The desired state (or desired outcome, expectation) that this person expected.
-4. identify a deep-dive question anchored to this situation. Our goal is to understand what's important to them and why.
-5. put all this together. Then make it conversational like Chris Voss.
-(i.e. seems like you were disappointed when xyz. looks like you experienced [current state], while you expected [desired state]. [deep-dive question])
     """.strip()
