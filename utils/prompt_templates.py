@@ -60,11 +60,35 @@ def generate_key_topics_template():
 ##################################
 # Journal Query Prompt Templates #
 ##################################
+def prompt_on_docs():
+    prompt_template = """
+        Here is some context of past journal entries {docs}
+        Here is my long term development plan {ltdp}
+        How do you feel about this?
+    """
+    prompt = PromptTemplate(template=prompt_template, input_variables=["docs"])
+    return prompt
 
+def get_chat_starting_question():
+    prompt_template = """
+        We talked about the following in yesterday's journal: {ytd_chat}
+        Help me come up with some ideas of what I should talk about today. Phrase it as a question.
+    """
+    prompt = PromptTemplate(template=prompt_template, input_variables=["ytd_chat"])
+    return prompt
+
+def get_topics_from_user_chat():
+    prompt_template = """
+        User has said this:{user_chat}
+        What are some of the keyworks, topics, nouns mentioned in this user response?
+        Provide a simple list of single words. No preamble.
+        """
+    prompt = PromptTemplate(template=prompt_template, input_variables=["user_chat"])
+    return prompt
 
 def get_journal_query_topic_based():
-    prompt_template = """What are some journal entries related to {topics}?"""
-    prompt = PromptTemplate(template=prompt_template, input_variables=["topics"])
+    prompt_template = """{user_chat} {topics}"""
+    prompt = PromptTemplate(template=prompt_template, input_variables=["user_chat","topics"])
     return prompt
 
 

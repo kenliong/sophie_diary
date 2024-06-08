@@ -1,5 +1,6 @@
 import warnings
 from langchain_community.vectorstores import FAISS
+import json
 
 def get_db(embeddings):
     db = FAISS.load_local(
@@ -28,3 +29,22 @@ def get_docs_with_query(db, query: str, num_of_docs: int, score_threshold: float
     else:    
         docs_list, thresholds = zip(*docs)
         return docs_list, thresholds
+    
+def format_docs(docs, sims):
+    '''
+    This function takes in a list of Langchain Documents and outputs a dictionary
+    '''
+    db_context_string = {}
+    for i in range(len(docs)):
+        if len(docs) == 0:
+            doc_string = {}
+        else:
+            doc_string = {
+                'relevance(0-1)': sims[i],
+                'metadata': docs[i].metadata,
+                'journal_entry': docs[i].page_content
+            }
+        db_context_string[f'context{i+1}'] = doc_string
+    db_context_string = json.dumps(db_context_string)
+    return db_context_string
+    
