@@ -25,8 +25,12 @@ if new_entry_submit and len(new_entry_text.strip()) == 0:
 elif new_entry_submit:
     st.button("Explore further", key="explore_further", on_click=enable_explore_further)
 
-if st.session_state["conversation_labels"]:
-    st.write(st.session_state["conversation_labels"])
+with st.expander("Debug view"):
+    if st.session_state["conversation_labels"]:
+        st.write(st.session_state["conversation_labels"])
+
+    if st.session_state["chat_model"]:
+        st.write(st.session_state["chat_model"].history[0].parts[0].text)
 
 if st.session_state["explore_further_enabled"]:
     chat_history_box = st.container()

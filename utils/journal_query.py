@@ -40,12 +40,15 @@ def format_docs(docs, sims):
         if len(docs) == 0:
             doc_string = {}
         else:
+            metadata = docs[i].metadata
+            del metadata['entry']
+
             doc_string = {
-                'relevance(0-1)': sims[i],
-                'metadata': docs[i].metadata,
+                #'relevance(0-1)': sims[i],
+                'metadata': metadata,
                 'journal_entry': docs[i].page_content
             }
         db_context_string[f'context{i+1}'] = doc_string
-    db_context_string = json.dumps(db_context_string)
+    db_context_string = json.dumps(db_context_string, indent=2)
     return db_context_string
     

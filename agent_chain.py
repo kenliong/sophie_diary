@@ -130,6 +130,7 @@ def chat_with_user(user_msg):
 
     chat_model = st.session_state['chat_model']
     chat_history = get_user_inputs_from_chat_model(chat_model, user_msg).strip()
+
     conversation_labels = DeepDiveConversationLabels()
 
     if len(chat_history.strip()) > len(user_msg.strip()):
@@ -139,19 +140,30 @@ def chat_with_user(user_msg):
         #st.write(conversation_labels)
 
         if not conversation_labels.emotions or conversation_labels.emotions == ['None']:
-            new_sys_prompt = get_chatbot_system_prompt()
+            new_sys_prompt = get_chatbot_system_prompt(
+                sahha_insights = get_sahha_insights(1,1),
+                #similar_issues = get_db_context(chat_history)
+            )
             
             st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
             chat_model = st.session_state['chat_model']
         
         elif not conversation_labels.current_state or conversation_labels.current_state == 'None':
-            new_sys_prompt = get_chatbot_system_prompt('- The current state (or real outcome) that this person experienced')
+            new_sys_prompt = get_chatbot_system_prompt(
+                additional_info = '- The current state (or real outcome) that this person experienced',
+                sahha_insights = get_sahha_insights(1,1),
+                similar_issues = get_db_context(chat_history)
+            )
             
             st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
             chat_model = st.session_state['chat_model']
 
         elif not conversation_labels.desired_state or conversation_labels.desired_state == 'None':
-            new_sys_prompt = get_chatbot_system_prompt('- The desired state (or desired outcome, expectation) that this person expected.')
+            new_sys_prompt = get_chatbot_system_prompt(
+                additional_info = '- The desired state (or desired outcome, expectation) that this person expected.',
+                sahha_insights = get_sahha_insights(1,1),
+                similar_issues = get_db_context(chat_history)
+            )
 
             st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
             chat_model = st.session_state['chat_model']
