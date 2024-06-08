@@ -1,7 +1,5 @@
 from langchain.prompts import PromptTemplate
 
-from old_diary_entries import emotions
-
 '''
 READ THIS BEFORE ADDING PROMPTS
 Specifications:
@@ -25,13 +23,25 @@ result = chain.run({"context": context})
 ####################################
 
 
-def generate_emotions_from_diary_template():
+def generate_emotions_template():
     prompt_template = """
     Based on the content from this diary entry, can you tag it with the relevant emotions?
     This is the diary entry: {entry_content}.
     This is the list of emotions that you can tag from: {emotions}
     """
     prompt = PromptTemplate(template=prompt_template, input_variables=["entry_content", "emotions"])
+    return prompt
+
+
+def generate_key_topics_template():
+    prompt_template = """
+    Based on the content from this diary entry, can you tag it with the relevant key topics?
+    This is the diary entry: {entry_content}.
+    This is the list of key topics that you can tag from: {key_topics}
+    """
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["entry_content", "key_topics"]
+    )
     return prompt
 
 
