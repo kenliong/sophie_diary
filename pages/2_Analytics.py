@@ -25,14 +25,14 @@ data['key_topics'] = data['key_topics'].apply(lambda x: x.replace("[", ""))
 data['key_topics'] = data['key_topics'].apply(lambda x: x.replace("]", ""))
 
 # Convert entry_date to datetime
-data['entry_date'] = pd.to_datetime(data['entry_date'], format='%b %d, %Y')
+data['entry_date'] = pd.to_datetime(data['entry_date'], format='%Y-%m-%d')
 
 # Page title
 st.title("Journal Entries Analytics")
 
 # Display number of journal entries and latest journal entry date
 num_entries = len(data)
-latest_entry_date = data['entry_date'].max().strftime('%B %d, %Y')
+latest_entry_date = data['entry_date'].max().strftime('%Y-%m-%d')
 col1, col2, col3 = st.columns(3)
 col1.metric("Well Being Score (Powered by Sahha)", well_being_score)
 col2.metric("Number of Journal Entries", num_entries)
