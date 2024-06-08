@@ -1,6 +1,8 @@
 import pandas as pd
 
-old_diary_entries = pd.read_csv("data/journal_entries_v2.csv")
+def get_old_diary_entries():
+    old_diary_entries = pd.read_csv("data/journal_entries_v2.csv")
+    return old_diary_entries
 
 mental_tendencies = [
 'High Expectations',
@@ -43,5 +45,5 @@ emotions = [
 "Boredom",
 "Hope",
 "Confusion",
-"Embarrassment",
+"Embarrassment"
 ]
