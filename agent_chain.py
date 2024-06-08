@@ -1,7 +1,7 @@
 import os
 import uuid
 
-import streamlit as st
+# import streamlit as st
 
 from new_diary_entry import *
 from old_diary_entries import old_diary_entries
