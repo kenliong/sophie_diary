@@ -23,7 +23,7 @@ Sophie's Diary offers personalized insights that are refined over time. Leveragi
    - Behavioral Tendencies: Analysis of the user's behavioral patterns, personal values, and areas for improvement.
    - Health Metrics: Integration of Sahha's health metrics, including activity levels and sleep patterns, to provide a holistic view of the user. These metrics are used to understand how physical health influences moods and actions.
 
-4. **Dashboard Updates**: After each journal entry, a dashboard is updated with insights into the user's emotions and health scores, providing a comprehensive view of their emotional state over time. Key components include:
+4. **Live Dashboard Updates**: After each journal entry, a dashboard is updated with insights into the user's emotions and health scores, providing a comprehensive view of their emotional state over time. Key components include:
    - A bar chart showing the most common emotions.
    - A word cloud describing predominant feelings.
    - A heatmap displaying the user's emotions over time.
