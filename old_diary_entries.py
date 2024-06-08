@@ -22,3 +22,26 @@ mental_tendencies = [
 'Multitasking'
 ]
 
+emotions = [
+"Happiness",
+"Sadness",
+"Anger",
+"Fear",
+"Surprise",
+"Disgust",
+"Love",
+"Anticipation",
+"Trust",
+"Jealousy",
+"Envy",
+"Guilt",
+"Shame",
+"Relief",
+"Pride",
+"Contempt",
+"Frustration",
+"Boredom",
+"Hope",
+"Confusion",
+"Embarrassment",
+]
