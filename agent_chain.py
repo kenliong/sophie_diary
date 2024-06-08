@@ -147,7 +147,7 @@ def chat_with_user(user_msg):
             output_dict = prepare_output_dict(conversation_labels, diary_entry_summary)
             st.session_state["output_complete_flag"] = "True"
             generate_analytics_new_entry(output_dict)
-            return "All values collected.", output_dict
+            return "Thanks for sharing! You've finished your reflection and submitted a new diary entry.", output_dict
 
     response = chat_model.send_message(user_msg)
 

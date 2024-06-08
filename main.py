@@ -23,7 +23,8 @@ with st.form(key="new_entry_form", clear_on_submit=False):
 if new_entry_submit and len(new_entry_text.strip()) == 0:
     st.error("Please key a new entry", icon="⚠️")
 elif new_entry_submit:
-    st.button("Explore further", key="explore_further", on_click=enable_explore_further)
+    #st.button("Explore further", key="explore_further", on_click=enable_explore_further)
+    enable_explore_further()
 
 with st.expander("Debug view"):
     if st.session_state["conversation_labels"]:
