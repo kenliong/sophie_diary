@@ -72,34 +72,6 @@ def generate_initial_prompts():
     return result
 
 
-def summary_prompts():
-    """
-    Provies a summary of the insights
-    1) common topics
-    2) actionable insights
-
-    :return:
-    """
-    model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    vector_store = FAISS.load_local(
-        "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
-    )
-    # context is part of the vector store
-    past_entries = vector_store.search(" ", search_type="similarity", k=20)
-    context = "\n".join(entry.page_content for entry in past_entries)
-
-    prompt_template = "Based on all my journal entries, can I identify 5 common topics?"
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
-    chain = LLMChain(llm=model, prompt=prompt)
-    result_topic = chain.run({"context": context})
-
-    prompt_template = "Based on all my journal entries, can I extract out actionable insights based on frustration?"
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
-    chain = LLMChain(llm=model, prompt=prompt)
-    result_insights = chain.run({"context": context})
-
-    return result_topic, result_insights
 
 
 def get_llm_chat_instance(system_prompt, previous_chat_model = None):
