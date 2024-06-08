@@ -46,7 +46,7 @@ Sophie's Diary offers personalized insights that are refined over time. Leveragi
 
 ### IMPORTANT NOTE:
 
-This app is inspired by our teammate, Sophie. All the data currently stored in the database are her past diary entries. Hence, if you notice that the AI-therapist has made some assumptions about your feelings or past experiences, it is due to the data that is currently stored. The LLM uses RAG techniques to search the database and chat with users, which will result in responses influenced by Sophie's past diaries.
+This app is inspired by our teammate, Sophie. No mock data is used. All the data currently stored in the database are some of her past diary entries. Hence, if you notice that the AI-therapist has made some assumptions about your feelings or past experiences, it is due to the data that is currently stored. The LLM uses RAG techniques to search the database and chat with users, which will result in responses influenced by Sophie's past diaries.
 
 We plan to make improvements and let other users try this app. In future iterations, each new user will have a clean database profile.
 
