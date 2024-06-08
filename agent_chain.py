@@ -6,6 +6,7 @@ from langchain.chains import LLMChain
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import FAISS
+from langchain_community.document_loaders import TextLoader
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from old_diary_entries import old_diary_entries
@@ -23,7 +24,7 @@ def initialize_vector_store(old_diary_entries: list):
 # initialize_vector_store(old_diary_entries)
 
 
-def add_diary_to_vector_store(diary_entry: str):
+def add_diary_to_vector_store(diary_entry_path: str):
     """
     'dairy_entry': should be a path to a .txt file 
     Add new diary entries to the vector store
@@ -36,8 +37,9 @@ def add_diary_to_vector_store(diary_entry: str):
         vector_store = FAISS.load_local("faiss_index",embeddings=embeddings,allow_dangerous_deserialization=True)
     else:
         vector_store = FAISS(embeddings=embeddings)
-
-    vector_store = FAISS.from_texts(diary_entry, embedding=embeddings)
+    
+    diary_entry = TextLoader(diary_entry_path).load()
+    vector_store = FAISS.from_documents(diary_entry, embedding=embeddings)
     vector_store.save_local("faiss_index")
     return vector_store
 
