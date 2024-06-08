@@ -28,6 +28,8 @@ Refer to `requirements.txt` for dependencies to download. To download, run `pip 
 
 ## Technical Design
 
+![image](https://github.com/kenliong/sophie_diary/assets/52147112/b35927a8-4b96-4fc1-b595-b5ad5110ab3e)
+
 ![image](https://github.com/kenliong/sophie_diary/assets/52147112/18edb372-8b45-467b-8635-8e4d4c65fd80)
 
 ### Health Indicators Retrieval
@@ -35,6 +37,9 @@ Refer to `requirements.txt` for dependencies to download. To download, run `pip 
 Integration of Sahha API is not possible now so as aligned, we have retrieved a static json file for a given day from the Sahha team. We assume user_id to be 4 and the output is from a given day. The output data contains physiological, mental and activity signals that can inform the user's current state of health. The
 
 ### Chat Loop
+
+![image](https://github.com/kenliong/sophie_diary/assets/52147112/4530412d-3cfc-4aa5-af19-d0676fd2c156)
+
 
 Chat Loop does a bunch of things:
 1. Upon receiving user message, it checks if the message has completed
