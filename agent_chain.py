@@ -18,7 +18,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def add_old_diary_entries_to_db(old_diary_entries: Dict):
     """
-    Add old diary entries to the vector store
+    Add old diary entries from csv to the vector store
     """
     try:
         embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
