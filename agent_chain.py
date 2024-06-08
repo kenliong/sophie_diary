@@ -1,6 +1,7 @@
 import os
 import uuid
-from datetime import datetime
+
+import streamlit as st
 
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
@@ -101,21 +102,23 @@ def summary_prompts():
     return result_topic, result_insights
 
 
-def get_llm_chat_instance():
-    sys_prompt = get_chatbot_system_prompt()
+def get_llm_chat_instance(system_prompt, previous_chat_model = None):
+    chat_history = []
+    if previous_chat_model:
+        chat_history = previous_chat_model.history[2:]
 
     model = get_llm_instance()
     chat = model.start_chat(
         history=[
-            {"role": "user", "parts": [sys_prompt]},
+            {"role": "user", "parts": [system_prompt]},
             {"role": "model", "parts": ["Understood."]},
-        ]
+        ] + chat_history
     )
 
     return chat
 
 
-def chat_with_user(user_msg, chat_model):
+def chat_with_user(user_msg):
     """
     Takes a user message, creates a response. Will add logic steps to steer the conversation where needed.
     """
@@ -123,22 +126,45 @@ def chat_with_user(user_msg, chat_model):
     # - https://ai.google.dev/gemini-api/docs/get-started/tutorial?lang=python
     # - https://docs.streamlit.io/develop/api-reference/write-magic/st.write_stream
 
-    chat_history = get_user_inputs_from_chat_model(chat_model, user_msg)
+    chat_model = st.session_state['chat_model']
+    chat_history = get_user_inputs_from_chat_model(chat_model, user_msg).strip()
     conversation_labels = DeepDiveConversationLabels()
 
-    if len(chat_history) > 0:
-        # currently we are running this sequentially. Potentially to run this in the "background"
+    if len(chat_history.strip()) > len(user_msg.strip()):
+        # currently we are running this sequentially. Potentially to run this in the "background"?
         conversation_labels = extract_info_from_conversation(chat_history)
-        if check_conversation_labels(conversation_labels):
+        
+        #st.write(conversation_labels)
+
+        if not conversation_labels.emotions or conversation_labels.emotions == ['None']:
+            new_sys_prompt = get_chatbot_system_prompt()
+            
+            st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
+            chat_model = st.session_state['chat_model']
+        
+        elif not conversation_labels.current_state or conversation_labels.current_state == 'None':
+            new_sys_prompt = get_chatbot_system_prompt('- The current state (or real outcome) that this person experienced')
+            
+            st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
+            chat_model = st.session_state['chat_model']
+
+        elif not conversation_labels.desired_state or conversation_labels.desired_state == 'None':
+            new_sys_prompt = get_chatbot_system_prompt('- The desired state (or desired outcome, expectation) that this person expected.')
+
+            st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
+            chat_model = st.session_state['chat_model']
+        else:
+            # add to vectorstore
             diary_entry_summary = summarize_new_entry(chat_model)
             output_dict = prepare_output_dict(conversation_labels, diary_entry_summary)
+            st.session_state["output_complete_flag"] = "True"
             generate_analytics_new_entry(output_dict)
             return "All values collected.", output_dict
 
     response = chat_model.send_message(user_msg)
 
     return response.text, conversation_labels.model_dump()
-
+#test
 
 def get_user_inputs_from_chat_model(chat_model, user_msg=""):
     chat_history = ""
