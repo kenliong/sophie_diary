@@ -43,5 +43,21 @@ emotions = [
 "Boredom",
 "Hope",
 "Confusion",
-"Embarrassment",
+"Embarrassment"
+]
+
+key_topics = [
+"Work and Career",
+"Relationships",
+"Health and Well-being",
+"Personal Growth",
+"Emotions and Feelings",
+"Finances",
+"Daily Life",
+"Travel and Adventure",
+"Spirituality and Beliefs",
+"Technology and Innovation",
+"Social Issues and Community",
+"Creativity and Arts",
+"Dreams and Aspirations"
 ]

@@ -1,22 +1,18 @@
+import streamlit as st
 import os
-from typing import Dict
-
-import google.generativeai as genai
-from dotenv import load_dotenv
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
-from langchain_community.document_loaders import TextLoader
-from langchain_community.vectorstores import FAISS
-from langchain_core.documents import Document
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from utils.llm_utils import *
+from utils.prompt_templates import *
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+from old_diary_entries import old_diary_entries
+from new_diary_entry import *
+import uuid
 
 
 def add_old_diary_entries_to_db(old_diary_entries: Dict):
     """
-    Add old diary entries from csv to the vector store
+    Add old diary entries to the vector store
     """
     try:
         embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
@@ -43,15 +39,15 @@ def add_old_diary_entries_to_db(old_diary_entries: Dict):
         return {"status": "failure", "message": f"An error occurred: {str(e)}"}
 
 
-def format_diary_entry(diary_entry_path: str, **kwargs):
+def format_diary_entry(diary_entry):
     """
     Format diary entry for vector store
     """
-    diary_entry_path = "test_diary.txt"
-    diary_entry = TextLoader(diary_entry_path).load()
+    #diary_entry_path = "test_diary.txt"
+    #diary_entry = TextLoader(diary_entry_path).load()
     diary_with_metadata = {
-        "metadata": [{"date": diary_entry["datetime"]}, {"title": diary_entry["title"]}],
-        "diary_content": diary_entry["content"],
+        "metadata": [{"date": diary_entry["datetime"]}, {"title": diary_entry["entry_title"]}],
+        "diary_content": diary_entry["entry_content"],
     }
     return diary_with_metadata
 
@@ -110,16 +106,6 @@ def generate_initial_prompts():
     return result
 
 
-def chat_chain():
-    """
-    Uses langchain to create a question-answering chain for chatbot
-    """
-
-    # TODO: Implement this function
-
-    return
-
-
 def summary_prompts():
     """
     Provies a summary of the insights
@@ -149,21 +135,10 @@ def summary_prompts():
 
     return result_topic, result_insights
 
-
 def get_llm_chat_instance():
-    sys_prompt = """
-You are a therapist psychologist, and you have ability like Chris Voss, the FBI hostage negotiator, who labels what this person is going through.
-
-Based on the ongoing conversations, prompt the user and ask questions to get the following information:
-1. The emotions that this person experienced
-2. The current state (or real outcome) that this person experienced
-3. The desired state (or desired outcome, expectation) that this person expected.
-4. identify a deep-dive question anchored to this situation. Our goal is to understand what's important to them and why.
-5. put all this together. Then make it conversational like Chris Voss.
-(i.e. seems like you were disappointed when xyz. looks like you experienced [current state], while you expected [desired state]. [deep-dive question])
-    """.strip()
-
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    sys_prompt = get_chatbot_system_prompt()
+    
+    model = get_llm_instance()
     chat = model.start_chat(
         history=[
             {"role": "user", "parts": [sys_prompt]},
@@ -178,10 +153,45 @@ def chat_with_user(user_msg, chat_model):
     """
     Takes a user message, creates a response. Will add logic steps to steer the conversation where needed.
     """
-    # To do: to explore streaming
+    # To do: to explore streaming 
     # - https://ai.google.dev/gemini-api/docs/get-started/tutorial?lang=python
     # - https://docs.streamlit.io/develop/api-reference/write-magic/st.write_stream
+    
+    chat_history = get_user_inputs_from_chat_model(chat_model, user_msg)
+    conversation_labels = DeepDiveConversationLabels()
 
+    if len(chat_history) > 0:
+
+        # currently we are running this sequentially. Potentially to run this in the "background"
+        conversation_labels = extract_info_from_conversation(chat_history)
+        if check_conversation_labels(conversation_labels):
+            
+            # add to vectorstore
+            diary_entry_summary = summarize_new_entry(chat_model)
+            output_dict = prepare_output_dict(conversation_labels, diary_entry_summary)
+            #add_new_diary_to_db(output_dict)
+            return 'All values collected.', output_dict
+        
     response = chat_model.send_message(user_msg)
 
-    return response.text
+    return response.text, conversation_labels.dict()
+
+def get_user_inputs_from_chat_model(chat_model, user_msg=''):
+    chat_history = ''
+    for msg in chat_model.history[2:]:
+        if msg.role == 'user':
+            chat_history += msg.parts[0].text + '\n\n'
+
+    chat_history += f'{user_msg} \n\n'
+
+    return chat_history
+
+def prepare_output_dict(conversation_labels, diary_entry_summary):
+    output_dict = conversation_labels.dict()
+
+    output_dict['entry'] = uuid.uuid4()
+    output_dict['entry_date'] = datetime.now().strftime("%Y-%m-%d")
+    output_dict['entry_title'] = diary_entry_summary.entry_title
+    output_dict['entry_content'] = diary_entry_summary.entry_summary
+
+    return output_dict

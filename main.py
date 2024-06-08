@@ -1,10 +1,8 @@
-import os
-
-import google.generativeai as genai
 import streamlit as st
 from dotenv import load_dotenv
 
-from utils import *
+from utils.streamlit_utils import *
+from utils.llm_utils import *
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -52,6 +50,9 @@ elif new_entry_submit:
         on_click=enable_explore_further
     )
 
+if st.session_state['conversation_labels']:
+    st.write(st.session_state['conversation_labels'])
+
 if st.session_state['explore_further_enabled']:
 
     chat_history_box = st.container()
@@ -64,10 +65,12 @@ if st.session_state['explore_further_enabled']:
     if prompt:
         st.chat_message("user").write(prompt)
 
-        response = chat_with_user(
+        response, conversation_labels = chat_with_user(
             prompt,
             st.session_state['chat_model']
         )
+
+        st.session_state['conversation_labels'] = conversation_labels
 
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.session_state.messages.append({"role": "assistant", "content": response})
