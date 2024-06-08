@@ -8,36 +8,37 @@ from utils.llm_utils import *
 
 class DeepDiveConversationLabels(BaseModel):
     emotions: List[str] = Field(
-        default_factory=lambda: [], 
-        description="label the emotions that this person experienced. If this information is not found, output an empty list []."
+        default_factory=lambda: [],
+        description="label the emotions that this person experienced. If this information is not found, output an empty list [].",
     )
     current_state: Optional[str] = Field(
         default="",
-        description="Label the current state (or real outcome) that this person experienced. If this information is not found, output 'None'."
+        description="Label the current state (or real outcome) that this person experienced. If this information is not found, output 'None'.",
     )
     desired_state: Optional[str] = Field(
         default="",
-        description="Label the desired state (or desired outcome, expectation) that this person expected. If this information is not found, output 'None'"
+        description="Label the desired state (or desired outcome, expectation) that this person expected. If this information is not found, output 'None'",
     )
-    
+
 
 def extract_info_from_conversation(chat_history):
     parser = PydanticOutputParser(pydantic_object=DeepDiveConversationLabels)
-     
-    prompt = f'''
+
+    prompt = f"""
 The following are thoughts from a user, extract the following information.
 {parser.get_format_instructions()}
 ```
 {chat_history}
 ```
-    '''.strip()
-    
+    """.strip()
+
     model = get_llm_instance()
 
-    output = get_completion(model,prompt)
+    output = get_completion(model, prompt)
     parsed_output = parser.parse(output)
-    
+
     return parsed_output
+
 
 class DiaryEntrySummary(BaseModel):
     entry_title: str = Field(
@@ -47,28 +48,26 @@ class DiaryEntrySummary(BaseModel):
         description="A 1 to 2 paragraph summary of the user's experience based on the conversation history between the user and an AI model. Write this in first person perspective."
     )
 
+
 def summarize_new_entry(chat_model):
-    chat_history = ''
+    chat_history = ""
 
     for msg in chat_model.history[2:]:
         chat_history += f"{msg.role}: {msg.parts[0].text} \n\n"
 
     parser = PydanticOutputParser(pydantic_object=DiaryEntrySummary)
-     
-    prompt = f'''
+
+    prompt = f"""
 The following are thoughts from a user, extract the following information.
 {parser.get_format_instructions()}
 ```
 {chat_history}
 ```
-    '''.strip()
-    
+    """.strip()
+
     model = get_llm_instance()
 
-    output = get_completion(model,prompt)
+    output = get_completion(model, prompt)
     parsed_output = parser.parse(output)
-    
-    print(parsed_output)
-    
+
     return parsed_output
-    
