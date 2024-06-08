@@ -12,6 +12,8 @@
     "sleep_regularity": "Consistency of sleep time & wake time",
     "sleep_continuity": "Number of minutes spent awake after initially falling asleep",
     "sleep_debt": "Number of hours of sleep debt accumulated over the past few days",
-    "circadian_alignment": "Alignment of sleep patterns with natural light-dark cycle"
+    "circadian_alignment": "Alignment of sleep patterns with natural light-dark cycle",
+    "physical_recovery": "The duration & quality of deep sleep you experience",
+    "mental_recovery": "The amount & quality of REM (Rapid Eye Movement) sleep"
   }
 }
