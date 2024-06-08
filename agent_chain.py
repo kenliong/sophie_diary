@@ -8,7 +8,6 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import TextLoader
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from old_diary_entries import old_diary_entries
@@ -31,6 +30,7 @@ def format_diary_entry(diary_entry_path: str, **kwargs):
     """
     Format diary entry for vector store
     """
+    diary_entry_path = "test_diary.txt"
     diary_entry = TextLoader(diary_entry_path).load()
     diary_with_metadata = {
         "metadata": [{"date": diary_entry["datetime"]}, {"title": diary_entry["title"]}],
@@ -39,7 +39,7 @@ def format_diary_entry(diary_entry_path: str, **kwargs):
     return diary_with_metadata
 
 
-async def add_diary_to_vector_store(diary_entry: Dict):
+def add_diary_to_vector_store(diary_entry: Dict):
     """
     'dairy_entry': should be a path to a .txt file
     Add new diary entries to the vector store
@@ -54,9 +54,11 @@ async def add_diary_to_vector_store(diary_entry: Dict):
         )
     else:
         vector_store = FAISS()
+
     formatted_diary_entry = format_diary_entry(diary_entry)
-    vector_store.aadd_texts(
-        texts=formatted_diary_entry["diary_content"], metadatas=formatted_diary_entry["metadata"]
+    vector_store.add_documents(
+        documents=formatted_diary_entry["diary_content"],
+        metadatas=formatted_diary_entry["metadata"],
     )
 
     results = vector_store.asimilarity_search(formatted_diary_entry["diary_content"], top_k=1)
