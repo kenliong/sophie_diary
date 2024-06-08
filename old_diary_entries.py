@@ -1,7 +1,6 @@
 import pandas as pd
 
-legacy_df = pd.read_csv("data/journal_entries_v2.csv")
-old_diary_entries = legacy_df['entry_desc'].tolist()
+old_diary_entries = pd.read_csv("data/journal_entries_v2.csv")
 
 mental_tendencies = [
 'High Expectations',
@@ -22,3 +21,4 @@ mental_tendencies = [
 'Distractibility',
 'Multitasking'
 ]
+
