@@ -3,9 +3,12 @@ import os
 from utils.llm_utils import *
 from utils.prompt_templates import *
 
+load_dotenv()
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 from old_diary_entries import old_diary_entries
 from new_diary_entry import *
 import uuid
+
 
 def add_old_diary_entries_to_db(old_diary_entries: Dict):
     """
@@ -99,7 +102,6 @@ def generate_initial_prompts():
 
     prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
     chain = LLMChain(llm=model, prompt=prompt)
-
     result = chain.run({"context": context})
     return result
 
