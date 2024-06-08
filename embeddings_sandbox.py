@@ -24,19 +24,40 @@ embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004") #th
 db = jq.get_db(embeddings)
 
 #construct journal query
-query = pt.get_journal_query_topic_based().format(topics='family')
-
-docs, sims  = jq.get_docs_with_query(db, query, num_of_docs = 4)
-
-print(len(docs))
-print(len(sims))
-print(sims)
+user_chat = "I feel like a lot of us spend too much time on what we think we *should* do. we don’t spend time on learning about what we are good at or enjoy. this increases the likelihood of experiencing repeated failures, then losing the conviction that we can achieve something. learned helplessness."
+def get_db_context(user_chat, model):
+    prompt = pt.get_topics_from_user_chat()
+    chain = LLMChain(llm=model, prompt=prompt)
+    topics = chain.run({"user_chat": user_chat})
+    # print(topics)
+    query = pt.get_journal_query_topic_based().format(topics=topics, user_chat=user_chat)
+    docs, sims  = jq.get_docs_with_query(db, query, num_of_docs = 4, score_threshold=0)
+    db_context_string = jq.format_docs(docs,sims)
+    return db_context_string
+final = get_db_context(user_chat, model)
+# import json
+# final = {}
+# for i in range(len(docs)):
+#     if len(docs) == 0:
+#         doc_string = {}
+#     else:
+#         doc_string = {
+#             'relevance(0-1)': sims[i],
+#             'metadata': docs[i].metadata,
+#             'journal_entry': docs[i].page_content
+#         }
+#     final[f'entry{i}'] = doc_string
+# final = json.dumps(final)
+print(final)
+# print(len(docs))
+# print(len(sims))
+# print(sims)
 # print(docs[0])
 # print(docs[1])
 
-prompt = pt.prompt_on_docs()
-chain = LLMChain(llm=model, prompt=prompt)
-result = chain.run({"docs": docs})
-print(result)
+# prompt = pt.prompt_on_docs()
+# chain = LLMChain(llm=model, prompt=prompt)
+# result = chain.run({"docs": docs})
+# print(result)
 
 print("done")
