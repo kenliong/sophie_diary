@@ -102,7 +102,8 @@ def main():
 
     # Serialize to JSON
     random_user_json = json.dumps(random_user_dict, indent=4)
-    print(random_user_json)
+    # print(random_user_json)
+    return random_user_json
 
 if __name__ == "__main__":
     main()
