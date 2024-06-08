@@ -1,5 +1,6 @@
 import os
 import uuid
+from datetime import datetime
 
 import streamlit as st
 
@@ -12,6 +13,7 @@ from new_diary_entry import *
 from old_diary_entries import old_diary_entries
 from utils.llm_utils import *
 from utils.prompt_templates import *
+
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
