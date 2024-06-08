@@ -21,10 +21,11 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def get_db_context(user_chat, model):
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004") #this should be abstracted later
+    db = jq.get_db(embeddings)
     prompt = pt.get_topics_from_user_chat()
     chain = LLMChain(llm=model, prompt=prompt)
     topics = chain.run({"user_chat": user_chat})
-    # print(topics)
     query = pt.get_journal_query_topic_based().format(topics=topics, user_chat=user_chat)
     docs, sims  = jq.get_docs_with_query(db, query, num_of_docs = 4, score_threshold=0)
     db_context_string = jq.format_docs(docs,sims)
