@@ -49,10 +49,13 @@ I want to extract 5 actionable insights from the following data. Each point shou
 These are some of my past journal entries: {context}.
 And this is some data of my daily activities: {sahha_prompt}
 """
-prompt = PromptTemplate(template=prompt_template, input_variables=["context", "sahha_prompt"])
-prompt.format(context=context, sahha_prompt=sahha_prompt)
-chain = LLMChain(llm=model, prompt=prompt)
-inputs = {"context": context, "sahha_prompt": sahha_prompt}
-result_insights = chain.run(inputs)
+image_placeholder = st.empty()
+
+with st.spinner('Loading from RAG...'):
+    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "sahha_prompt"])
+    prompt.format(context=context, sahha_prompt=sahha_prompt)
+    chain = LLMChain(llm=model, prompt=prompt)
+    inputs = {"context": context, "sahha_prompt": sahha_prompt}
+    result_insights = chain.run(inputs)
 
 st.write(result_insights)
