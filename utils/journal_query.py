@@ -28,3 +28,9 @@ def get_docs_with_query(db, query: str, num_of_docs: int, score_threshold: float
     else:    
         docs_list, thresholds = zip(*docs)
         return docs_list, thresholds
+    
+def format_docs(docs):
+    '''
+    This function takes in a list of Langchain Documents and outputs a dictionary
+    '''
+    
