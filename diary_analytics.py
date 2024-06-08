@@ -15,6 +15,7 @@ from utils.prompt_templates import (
     generate_emotions_template,
     generate_key_topics_template,
     generate_mental_tendencies_template,
+    generate_reflection_questions
 )
 
 load_dotenv()
@@ -102,8 +103,10 @@ def generate_analytics_new_entry(output_dict: Dict):
     emotions = generate_emotions(output_dict)
     key_topics = generate_key_topics(output_dict)
     mental_tendencies = generate_mental_tendencies(output_dict)
+    reflection_questions = generate_reflection_questions(output_dict)
     output_dict["emotions"] = emotions
     output_dict["key_topics"] = key_topics
     output_dict["mental_tendencies"] = mental_tendencies
+    output_dict["reflection_questions"] = reflection_questions
 
     add_new_diary_to_db_and_csv(output_dict)

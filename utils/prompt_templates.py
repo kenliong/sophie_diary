@@ -22,13 +22,13 @@ result = chain.run({"context": context})
 # Chat to Metadata Prompt Templates #
 ####################################
 
-def generate_reflection_questions():
+def generate_reflection_questions_template():
     prompt_template = """
     This is the diary entry: {entry_content}.
     Recommend me 3 questions to reflect upon to improve this situation. 
     """
     prompt = PromptTemplate(template=prompt_template, input_variables=["entry_content"])
-    return
+    return prompt
 
 def generate_mental_tendencies_template():
     prompt_template = """
