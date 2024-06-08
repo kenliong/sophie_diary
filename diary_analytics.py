@@ -85,9 +85,9 @@ def generate_analytics_old_entries(diary_entry: Dict):
     emotions = generate_emotions(diary_entry)
     key_topics = generate_key_topics(diary_entry)
     mental_tendencies = generate_mental_tendencies(diary_entry)
-    # add reflt
+    reflection_questions = generate_reflection_questions(diary_entry)
 
-    return emotions, key_topics, mental_tendencies
+    return emotions, key_topics, mental_tendencies, reflection_questions
 
 
 def add_new_diary_to_db_and_csv(diary_entry: Dict):
