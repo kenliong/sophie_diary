@@ -1,10 +1,12 @@
 import os
+from typing import Dict
 
 import google.generativeai as genai
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
+from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import TextLoader
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
@@ -13,6 +15,7 @@ from old_diary_entries import old_diary_entries
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
 
 def initialize_vector_store(old_diary_entries: list):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
@@ -24,9 +27,21 @@ def initialize_vector_store(old_diary_entries: list):
 # initialize_vector_store(old_diary_entries)
 
 
-def add_diary_to_vector_store(diary_entry_path: str):
+def format_diary_entry(diary_entry_path: str, **kwargs):
     """
-    'dairy_entry': should be a path to a .txt file 
+    Format diary entry for vector store
+    """
+    diary_entry = TextLoader(diary_entry_path).load()
+    diary_with_metadata = {
+        "metadata": [{"date": diary_entry["datetime"]}, {"title": diary_entry["title"]}],
+        "diary_content": diary_entry["content"],
+    }
+    return diary_with_metadata
+
+
+async def add_diary_to_vector_store(diary_entry: Dict):
+    """
+    'dairy_entry': should be a path to a .txt file
     Add new diary entries to the vector store
     If vector store already exists, add new entries to it
     Otherwise, create a new vector store
@@ -34,12 +49,21 @@ def add_diary_to_vector_store(diary_entry_path: str):
 
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     if os.path.exists("faiss_index"):
-        vector_store = FAISS.load_local("faiss_index",embeddings=embeddings,allow_dangerous_deserialization=True)
+        vector_store = FAISS.load_local(
+            "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
+        )
     else:
-        vector_store = FAISS(embeddings=embeddings)
-    
-    diary_entry = TextLoader(diary_entry_path).load()
-    vector_store = FAISS.from_documents(diary_entry, embedding=embeddings)
+        vector_store = FAISS()
+    formatted_diary_entry = format_diary_entry(diary_entry)
+    vector_store.aadd_texts(
+        texts=formatted_diary_entry["diary_content"], metadatas=formatted_diary_entry["metadata"]
+    )
+
+    results = vector_store.asimilarity_search(formatted_diary_entry["diary_content"], top_k=1)
+    for result in results:
+        print(f"Diary content: {result['text']}")
+        print(f"Metadata: {result['metadata']}")
+
     vector_store.save_local("faiss_index")
     return vector_store
 
