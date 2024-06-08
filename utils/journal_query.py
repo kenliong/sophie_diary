@@ -1,4 +1,11 @@
 import warnings
+from langchain_community.vectorstores import FAISS
+
+def get_db(embeddings):
+    db = FAISS.load_local(
+        "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
+        )
+    return db     
     
 def get_docs_with_query(db, query: str, num_of_docs: int, score_threshold: float = 0):
     '''

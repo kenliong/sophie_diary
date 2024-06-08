@@ -10,8 +10,6 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
-from old_diary_entries import old_diary_entries
-
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
@@ -108,7 +106,6 @@ def generate_initial_prompts():
 
     prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
     chain = LLMChain(llm=model, prompt=prompt)
-
     result = chain.run({"context": context})
     return result
 
