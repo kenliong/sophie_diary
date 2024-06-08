@@ -30,8 +30,6 @@ The following are thoughts from a user, extract the following information.
     output = get_completion(model,prompt)
     parsed_output = parser.parse(output)
     
-    print(parsed_output)
-    
     return parsed_output
 
 def check_conversation_labels(conversation_labels):
