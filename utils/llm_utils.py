@@ -17,6 +17,7 @@ from langchain_core.documents import Document
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 from utils.prompt_templates import *
+from parse_sahha_score import main
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -54,13 +55,19 @@ def retrieve_sahha_insights(date_time, user_id):
     """
     user_id = 4 #hard-coded
 
-    with open('data/sample_sahha_scores.json') as f:
-        d = json.load(f)
+
+    random_user_json, dic = main()
+
+
+
     with open('data/sahha_metadata_flatten.json') as f:
         md = json.load(f)
 
-    sophie_dic = d[user_id]
-    factors_df = pd.DataFrame(sophie_dic['factors'])
+    lst1 = dic['activity_scores']
+    lst2 = dic['sleep_scores']
+    factor_lst = lst1 + lst2
+
+    factors_df = pd.DataFrame(factor_lst)#sophie_dic['factors'])
 
     lacking_df = factors_df[factors_df['state'] == 'low']
     lacking_df['metadata'] = lacking_df['name'].map(md)
@@ -70,4 +77,6 @@ def retrieve_sahha_insights(date_time, user_id):
 
     sahha_prompt = ' '.join(lacking_df['prompt'].tolist())
 
-    return sahha_prompt
+    well_being_score = dic['user']['score']
+
+    return sahha_prompt, well_being_score

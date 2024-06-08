@@ -3,7 +3,7 @@ import json
 from typing import List, Set, Union, Dict
 from random import randint
 
-sahha_scores_path: str = 'sample_sahha_scores.json'
+sahha_scores_path: str = 'data/sample_sahha_scores.json'
 activity_factors: Set[str] = set(['steps', 'active_hours', 'active_calories', 'intense_activity_duration', 'extended_inactivity', 'floors_climbed'])
 sleep_factors: Set[str] = set(['sleep_duration', 'sleep_regularity', 'sleep_continuity', 'sleep_debt', 'circadian_alignment', 'physical_recovery', 'mental_recovery'])
 
@@ -91,7 +91,7 @@ def main():
     # Sahha User Overview, Sahha User Activity Score, Sahha User Sleep Score
 
     # Return a random User
-    random_user: List[SahhaUser, Set[SahhaScore], Set[SahhaScore]] = user_list[randint(0,len(user_list)-1)]
+    random_user: List[SahhaUser, Set[SahhaScore], Set[SahhaScore]] = user_list[4]#randint(0,len(user_list)-1)]
 
     # Convert random_user to a dictionary
     random_user_dict: dict = {
@@ -103,7 +103,7 @@ def main():
     # Serialize to JSON
     random_user_json = json.dumps(random_user_dict, indent=4)
     # print(random_user_json)
-    return random_user_json
+    return random_user_json, random_user_dict
 
 if __name__ == "__main__":
     main()
