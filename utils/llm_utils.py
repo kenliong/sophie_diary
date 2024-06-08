@@ -4,7 +4,8 @@ from datetime import datetime, timezone
 from typing import Dict
 import json
 import pandas as pd
-
+import utils.journal_query as jq
+import utils.prompt_templates as pt
 import google.generativeai as genai
 from dotenv import load_dotenv
 from langchain.chains import LLMChain
