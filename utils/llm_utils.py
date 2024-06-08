@@ -21,8 +21,8 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 
 def get_llm_instance():
-    # model = genai.GenerativeModel('gemini-1.5-flash')
-    model = genai.GenerativeModel("gemini-1.0-pro")
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    #model = genai.GenerativeModel("gemini-1.0-pro")
     return model
 
 

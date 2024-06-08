@@ -8,6 +8,12 @@ from old_diary_entries import old_diary_entries
 from utils.llm_utils import *
 from utils.prompt_templates import *
 
+load_dotenv()
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+from old_diary_entries import old_diary_entries
+from new_diary_entry import *
+import uuid
+
 
 def add_old_diary_entries_to_db(old_diary_entries: Dict):
     """
@@ -45,7 +51,7 @@ def format_diary_entry(diary_entry):
     # diary_entry_path = "test_diary.txt"
     # diary_entry = TextLoader(diary_entry_path).load()
     diary_with_metadata = {
-        "metadata": [{"date": diary_entry["datetime"]}, {"title": diary_entry["entry_title"]}],
+        "metadata": [{"date": diary_entry["entry_date"]}, {"title": diary_entry["entry_title"]}],
         "diary_content": diary_entry["entry_content"],
     }
     return diary_with_metadata
@@ -101,7 +107,6 @@ def generate_initial_prompts():
 
     prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
     chain = LLMChain(llm=model, prompt=prompt)
-
     result = chain.run({"context": context})
     return result
 
@@ -173,7 +178,7 @@ def chat_with_user(user_msg, chat_model, output_complete_flag):
 
     response = chat_model.send_message(user_msg)
 
-    return response.text, conversation_labels.dict(), output_complete_flag
+    return response.text, conversation_labels.model_dump(), output_complete_flag
 
 
 def get_user_inputs_from_chat_model(chat_model, user_msg=""):

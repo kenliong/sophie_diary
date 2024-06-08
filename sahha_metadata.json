@@ -1,0 +1,19 @@
+{
+  "activity_factors": {
+    "steps": "Number of steps you walked in a day",
+    "active_hours": "Number of hours you were physically active",
+    "active_calories": "Amount of calories burned beyond resting metabolic rate",
+    "intense_activity_duration": "Number of minutes spent in activities of moderate to vigorous intensity",
+    "extended_inactivity": "Number of minutes spent with little physical movement",
+    "floors_climbed": "Number of floors climbed in a day"
+  },
+  "sleep_factors": {
+    "sleep_duration": "Number of hours spent sleeping",
+    "sleep_regularity": "Consistency of sleep time & wake time",
+    "sleep_continuity": "Number of minutes spent awake after initially falling asleep",
+    "sleep_debt": "Number of hours of sleep debt accumulated over the past few days",
+    "circadian_alignment": "Alignment of sleep patterns with natural light-dark cycle",
+    "physical_recovery": "The duration & quality of deep sleep you experience",
+    "mental_recovery": "The amount & quality of REM (Rapid Eye Movement) sleep"
+  }
+}
