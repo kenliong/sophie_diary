@@ -1,17 +1,5 @@
 import warnings
-
-def get_journal_query_simple():
-    query = "Today i am very sad"
-    return query
     
-def get_journal_query_topic_based(topics):
-    query = f'What are some journal entries related to {topics}'
-    return query
-
-def get_query_from_llm():
-    #TODO
-    return "something"
-
 def get_docs_with_query(db, query: str, num_of_docs: int, score_threshold: float = 0):
     '''
     Input
