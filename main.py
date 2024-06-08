@@ -9,12 +9,11 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 load_resources()
 
 st.set_page_config(
-    page_title="Template Chatbot", page_icon="💬", layout="wide", initial_sidebar_state="expanded"
+    page_title="Sophie's Diary", page_icon="💬", layout="wide", initial_sidebar_state="expanded"
 )
 st.markdown(get_custom_css_modifier(), unsafe_allow_html=True)
 
-st.markdown("<h5 style='text-align: left;'>💬 Template Chatbot</h5>", unsafe_allow_html=True)
-st.title("Sophie's Diary")
+st.markdown("<h4 style='text-align: left;'>💬 Sophie's Diary</h4>", unsafe_allow_html=True)
 
 
 # Display starting prompts only once before the chat starts
