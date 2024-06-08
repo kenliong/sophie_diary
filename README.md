@@ -102,7 +102,7 @@ The relational database store enables efficient access and storage of diary anal
 
 ### In Progress
 
-#### Personality Summariztion
+#### Personality Summarization
 
 In the future, we would like to encapsulate the user's personality traits so as to provide a more in-depth look into their personality. The LLM can also use it to consider different approaches to the conversation. Goal is to design a future you that is more resilient.
 
