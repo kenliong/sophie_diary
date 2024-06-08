@@ -8,7 +8,7 @@ For users who do not journal, the app encourages reflection through short prompt
 
 ## Key value proposition
 
-Sophie's Diary offers personalized insights that build over time, encouraging users to reflect on their day with guided prompts and small actionable steps for self-improvement. Leveraging AI and LLM technology, the app provides intelligent, timely and cost-effective support, even prompting users when they feel demotivated.
+Sophie's Diary offers personalized insights that are refined over time. Leveraging AI and LLM technology, the app provides intelligent, timely and cost-effective support.
 
 ## Features
 
