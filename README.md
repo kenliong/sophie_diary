@@ -27,8 +27,7 @@ Refer to `requirements.txt` for dependencies to download. To download, run `pip 
 5. After completing your journal entry, view the updated insights on your dashboard alongside personal actionable steps that you can take to improve yor health.
 
 ## Technical Design
-
-![image](https://github.com/kenliong/sophie_diary/assets/52147112/b35927a8-4b96-4fc1-b595-b5ad5110ab3e)
+![Sophies Diary Overview](https://github.com/kenliong/sophie_diary/assets/71979039/a4252a9b-9c88-42bc-af85-3bac8efffbaa)
 
 ![image](https://github.com/kenliong/sophie_diary/assets/52147112/18edb372-8b45-467b-8635-8e4d4c65fd80)
 
