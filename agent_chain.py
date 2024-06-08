@@ -112,34 +112,31 @@ def chat_with_user(user_msg):
         # currently we are running this sequentially. Potentially to run this in the "background"?
         conversation_labels = extract_info_from_conversation(chat_history)
 
-        if not conversation_labels.emotions or conversation_labels.emotions == ['None']:
-            new_sys_prompt = get_chatbot_system_prompt(
-                sahha_insights = get_sahha_insights(1,1),
-                #similar_issues = get_db_context(chat_history)
-            )
-            
-            st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
-            chat_model = st.session_state['chat_model']
-        
-        elif not conversation_labels.current_state or conversation_labels.current_state == 'None':
-            new_sys_prompt = get_chatbot_system_prompt(
-                additional_info = '- The current state (or real outcome) that this person experienced',
-                sahha_insights = get_sahha_insights(1,1),
-                similar_issues = get_db_context(chat_history)
-            )
-            
-            st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
-            chat_model = st.session_state['chat_model']
+        if not conversation_labels.emotions or conversation_labels.emotions == ["None"]:
+            new_sys_prompt = get_chatbot_system_prompt(sahha_insights=get_sahha_insights(1, 1))
 
-        elif not conversation_labels.desired_state or conversation_labels.desired_state == 'None':
+            st.session_state["chat_model"] = get_llm_chat_instance(new_sys_prompt, chat_model)
+            chat_model = st.session_state["chat_model"]
+
+        elif not conversation_labels.current_state or conversation_labels.current_state == "None":
             new_sys_prompt = get_chatbot_system_prompt(
-                additional_info = '- The desired state (or desired outcome, expectation) that this person expected.',
-                sahha_insights = get_sahha_insights(1,1),
-                similar_issues = get_db_context(chat_history)
+                additional_info="- The current state (or real outcome) that this person experienced",
+                sahha_insights=get_sahha_insights(1, 1),
+                similar_issues=get_db_context(chat_history),
             )
 
-            st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
-            chat_model = st.session_state['chat_model']
+            st.session_state["chat_model"] = get_llm_chat_instance(new_sys_prompt, chat_model)
+            chat_model = st.session_state["chat_model"]
+
+        elif not conversation_labels.desired_state or conversation_labels.desired_state == "None":
+            new_sys_prompt = get_chatbot_system_prompt(
+                additional_info="- The desired state (or desired outcome, expectation) that this person expected.",
+                sahha_insights=get_sahha_insights(1, 1),
+                similar_issues=get_db_context(chat_history),
+            )
+
+            st.session_state["chat_model"] = get_llm_chat_instance(new_sys_prompt, chat_model)
+            chat_model = st.session_state["chat_model"]
 
         else:
             # add to vectorstore
@@ -147,14 +144,14 @@ def chat_with_user(user_msg):
             output_dict = prepare_output_dict(conversation_labels, diary_entry_summary)
             st.session_state["output_complete_flag"] = "True"
             generate_analytics_new_entry(output_dict)
-            return "Thanks for sharing! You've finished your reflection and submitted a new diary entry.", output_dict
+            return (
+                "Thanks for sharing! You've finished your reflection and submitted a new diary entry.",
+                output_dict,
+            )
 
     response = chat_model.send_message(user_msg)
 
     return response.text, conversation_labels.model_dump()
-
-
-# test
 
 
 def get_user_inputs_from_chat_model(chat_model, user_msg=""):
