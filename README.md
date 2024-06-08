@@ -28,7 +28,7 @@ Refer to `requirements.txt` for dependencies to download. To download, run `pip 
 
 ## Technical Design
 
-![image](https://github.com/kenliong/sophie_diary/assets/52147112/9cf7e993-cb33-4959-8458-0c5a03bc3e4c)
+![image](https://github.com/kenliong/sophie_diary/assets/52147112/18edb372-8b45-467b-8635-8e4d4c65fd80)
 
 ### Health Indicators Retrieval
 
