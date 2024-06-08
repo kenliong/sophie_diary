@@ -15,13 +15,27 @@ from utils.prompt_templates import (
     generate_emotions_template,
     generate_key_topics_template,
     generate_mental_tendencies_template,
-    generate_reflection_questions
+    generate_reflection_questions_template
 )
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
+def generate_reflection_questions(diary_entry):
+    """
+    Uses gemini to tag mental tendencies to diary entries
+    """
+    entry_content = diary_entry["entry_content"]
+    model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
+    prompt_template = generate_mental_tendencies_template()
+    prompt_template.format(entry_content=entry_content, mental_tendencies=mental_tendencies)
+    chain = LLMChain(llm=model, prompt=prompt_template)
+    inputs = {"entry_content": entry_content, "mental_tendencies": mental_tendencies}
+    response = chain.run(inputs)
 
+    return response    
+    
+    
 def generate_mental_tendencies(diary_entry):
     """
     Uses gemini to tag mental tendencies to diary entries
@@ -71,6 +85,7 @@ def generate_analytics_old_entries(diary_entry: Dict):
     emotions = generate_emotions(diary_entry)
     key_topics = generate_key_topics(diary_entry)
     mental_tendencies = generate_mental_tendencies(diary_entry)
+    #add reflt
 
     return emotions, key_topics, mental_tendencies
 
