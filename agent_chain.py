@@ -174,7 +174,7 @@ def chat_with_user(user_msg, chat_model):
         
     response = chat_model.send_message(user_msg)
 
-    return response.text, conversation_labels.dict()
+    return response.text, conversation_labels.model_dump()
 
 def get_user_inputs_from_chat_model(chat_model, user_msg=''):
     chat_history = ''
