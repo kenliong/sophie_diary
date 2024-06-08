@@ -15,7 +15,7 @@ data['mental_tendencies'] = data['mental_tendencies'].apply(lambda x: x.replace(
 data['key_topics'] = data['key_topics'].apply(lambda x: x.replace("'", ""))
 data['key_topics'] = data['key_topics'].apply(lambda x: x.replace("[", ""))
 data['key_topics'] = data['key_topics'].apply(lambda x: x.replace("]", ""))
-data['entry_date'] = pd.to_datetime(data['entry_date'], format='%b %d, %Y')
+data['entry_date'] = pd.to_datetime(data['entry_date'], format='%Y-%m-%d')
 data['entry_date2'] = data['entry_date'].astype(str)
 
 data = data.fillna('')
@@ -43,5 +43,5 @@ with col2:
     st.write(selected_entry['emotions'])
     st.subheader("Key Topics")
     st.write(selected_entry['key_topics'])
-    st.subheader("Reflective Questions")
-    st.write(selected_entry['reflective_questions'])
+    st.subheader("Reflection Questions")
+    st.write(selected_entry['reflection_questions'])

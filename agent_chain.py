@@ -3,7 +3,6 @@ import uuid
 from datetime import datetime
 
 import streamlit as st
-
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
@@ -13,7 +12,6 @@ from new_diary_entry import *
 from old_diary_entries import old_diary_entries
 from utils.llm_utils import *
 from utils.prompt_templates import *
-
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -33,8 +31,14 @@ def add_old_diary_entries_to_db(old_diary_entries: Dict):
                     page_content=diary_entry["entry_content"],
                     metadata=dict(
                         entry=diary_entry["entry"],
+                        current_state=diary_entry["current_state"],
+                        desired_state=diary_entry["desired_state"],
                         date=diary_entry["entry_date"],
                         title=diary_entry["entry_title"],
+                        mental_tendencies=diary_entry["mental_tendencies"],
+                        emotions=diary_entry["emotions"],
+                        key_topics=diary_entry["key_topics"],
+                        reflection_questions=diary_entry["reflection_questions"],
                     ),
                 )
             )
@@ -74,37 +78,7 @@ def generate_initial_prompts():
     return result
 
 
-def summary_prompts():
-    """
-    Provies a summary of the insights
-    1) common topics
-    2) actionable insights
-
-    :return:
-    """
-    model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    vector_store = FAISS.load_local(
-        "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
-    )
-    # context is part of the vector store
-    past_entries = vector_store.search(" ", search_type="similarity", k=20)
-    context = "\n".join(entry.page_content for entry in past_entries)
-
-    prompt_template = "Based on all my journal entries, can I identify 5 common topics?"
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
-    chain = LLMChain(llm=model, prompt=prompt)
-    result_topic = chain.run({"context": context})
-
-    prompt_template = "Based on all my journal entries, can I extract out actionable insights based on frustration?"
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
-    chain = LLMChain(llm=model, prompt=prompt)
-    result_insights = chain.run({"context": context})
-
-    return result_topic, result_insights
-
-
-def get_llm_chat_instance(system_prompt, previous_chat_model = None):
+def get_llm_chat_instance(system_prompt, previous_chat_model=None):
     chat_history = []
     if previous_chat_model:
         chat_history = previous_chat_model.history[2:]
@@ -114,7 +88,8 @@ def get_llm_chat_instance(system_prompt, previous_chat_model = None):
         history=[
             {"role": "user", "parts": [system_prompt]},
             {"role": "model", "parts": ["Understood."]},
-        ] + chat_history
+        ]
+        + chat_history
     )
 
     return chat
@@ -128,7 +103,7 @@ def chat_with_user(user_msg):
     # - https://ai.google.dev/gemini-api/docs/get-started/tutorial?lang=python
     # - https://docs.streamlit.io/develop/api-reference/write-magic/st.write_stream
 
-    chat_model = st.session_state['chat_model']
+    chat_model = st.session_state["chat_model"]
     chat_history = get_user_inputs_from_chat_model(chat_model, user_msg).strip()
 
     conversation_labels = DeepDiveConversationLabels()
@@ -136,8 +111,6 @@ def chat_with_user(user_msg):
     if len(chat_history.strip()) > len(user_msg.strip()):
         # currently we are running this sequentially. Potentially to run this in the "background"?
         conversation_labels = extract_info_from_conversation(chat_history)
-        
-        #st.write(conversation_labels)
 
         if not conversation_labels.emotions or conversation_labels.emotions == ['None']:
             new_sys_prompt = get_chatbot_system_prompt(
@@ -167,6 +140,7 @@ def chat_with_user(user_msg):
 
             st.session_state['chat_model'] = get_llm_chat_instance(new_sys_prompt,chat_model)
             chat_model = st.session_state['chat_model']
+
         else:
             # add to vectorstore
             diary_entry_summary = summarize_new_entry(chat_model)
@@ -178,7 +152,10 @@ def chat_with_user(user_msg):
     response = chat_model.send_message(user_msg)
 
     return response.text, conversation_labels.model_dump()
-#test
+
+
+# test
+
 
 def get_user_inputs_from_chat_model(chat_model, user_msg=""):
     chat_history = ""
