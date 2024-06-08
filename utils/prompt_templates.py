@@ -1,16 +1,34 @@
 from langchain.prompts import PromptTemplate
+'''
+READ THIS BEFORE ADDING PROMPTS
+Specifications:
+Each function should not require any inputs
+The output it a PromptTemplate Objects
+Inside each function define a string 
 
+e.g.
+def get_concerns_prompt():
+    prompt = """These are some of my concerns today {concerns_list}"""
+    prompt = PromptTemplate(template=prompt_template, input_variables=["topics"])
+    return prompt
+    
+How the PromptTemplace Object is used:
+prompt = get_prompt()
+chain = LLMChain(llm=model, prompt=prompt)
+result = chain.run({"context": context})
+'''
 ####################################
-# Chat to Journal Prompt Templates #
+# Chat to Metadata Prompt Templates #
 ####################################
+
 
 
 ##################################
 # Journal Query Prompt Templates #
 ##################################
 
-def get_journal_query_topic_based(topics):
-    prompt_template = f"""What are some journal entries related to {topics}?"""
+def get_journal_query_topic_based():
+    prompt_template = """What are some journal entries related to {topics}?"""
     prompt = PromptTemplate(template=prompt_template, input_variables=["topics"])
     return prompt
 
