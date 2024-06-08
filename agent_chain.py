@@ -1,8 +1,10 @@
 import os
 from typing import Dict
 
+import faiss
 import google.generativeai as genai
 from dotenv import load_dotenv
+from langchain import FAISS, docstore
 from langchain.chains import LLMChain
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
@@ -23,7 +25,6 @@ def add_old_diary_entries_to_db(old_diary_entries: Dict):
     """
     try:
         embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-        vector_store = FAISS()
         list_of_documents = []
 
         for _, diary_entry in old_diary_entries.iterrows():
@@ -37,7 +38,7 @@ def add_old_diary_entries_to_db(old_diary_entries: Dict):
                     ),
                 )
             )
-        vector_store.from_documents(list_of_documents, embeddings)
+        vector_store = FAISS.from_documents(list_of_documents, embeddings)
         vector_store.save_local("faiss_index")
         return {
             "status": "success",
