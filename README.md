@@ -81,7 +81,7 @@ Chat loop does a bunch of things:
 
 4. Personalized responses: The Response Constructor aggregates the data from various sources and makes a call to the LLM, optimizing prompts using LangChain chains. This involves RAG techniques on the vector database, which includes past diary entries, metadata, and Sahha API data. The constructed response is then sent back to the user, looping back to Step 2 for continuous evaluation.
 
-### Real-time diary analytics
+### Real-time data analytics
 
 Upon completion of the chat, chat data and metadata are processed into Diary Analytics that can be stored in the Vector Data Store and Relational Database Store (currently CSV). Using LangChain and advanced prompt techniques, we extract the following attributes from a single diary entry:
 
