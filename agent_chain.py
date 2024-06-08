@@ -1,11 +1,13 @@
-import streamlit as st
 import os
+import uuid
+
+import streamlit as st
+
+from new_diary_entry import *
+from old_diary_entries import old_diary_entries
 from utils.llm_utils import *
 from utils.prompt_templates import *
 
-from old_diary_entries import old_diary_entries
-from new_diary_entry import *
-import uuid
 
 def add_old_diary_entries_to_db(old_diary_entries: Dict):
     """
@@ -40,8 +42,8 @@ def format_diary_entry(diary_entry):
     """
     Format diary entry for vector store
     """
-    #diary_entry_path = "test_diary.txt"
-    #diary_entry = TextLoader(diary_entry_path).load()
+    # diary_entry_path = "test_diary.txt"
+    # diary_entry = TextLoader(diary_entry_path).load()
     diary_with_metadata = {
         "metadata": [{"date": diary_entry["datetime"]}, {"title": diary_entry["entry_title"]}],
         "diary_content": diary_entry["entry_content"],
@@ -133,9 +135,10 @@ def summary_prompts():
 
     return result_topic, result_insights
 
+
 def get_llm_chat_instance():
     sys_prompt = get_chatbot_system_prompt()
-    
+
     model = get_llm_instance()
     chat = model.start_chat(
         history=[
@@ -147,49 +150,49 @@ def get_llm_chat_instance():
     return chat
 
 
-def chat_with_user(user_msg, chat_model):
+def chat_with_user(user_msg, chat_model, output_complete_flag):
     """
     Takes a user message, creates a response. Will add logic steps to steer the conversation where needed.
     """
-    # To do: to explore streaming 
+    # To do: to explore streaming
     # - https://ai.google.dev/gemini-api/docs/get-started/tutorial?lang=python
     # - https://docs.streamlit.io/develop/api-reference/write-magic/st.write_stream
-    
+
     chat_history = get_user_inputs_from_chat_model(chat_model, user_msg)
     conversation_labels = DeepDiveConversationLabels()
 
     if len(chat_history) > 0:
-
         # currently we are running this sequentially. Potentially to run this in the "background"
         conversation_labels = extract_info_from_conversation(chat_history)
         if check_conversation_labels(conversation_labels):
-            
             # add to vectorstore
             diary_entry_summary = summarize_new_entry(chat_model)
             output_dict = prepare_output_dict(conversation_labels, diary_entry_summary)
-            #add_new_diary_to_db(output_dict)
-            return 'All values collected.', output_dict
-        
+            output_complete_flag = "True"
+            return "All values collected.", output_dict, output_complete_flag
+
     response = chat_model.send_message(user_msg)
 
-    return response.text, conversation_labels.dict()
+    return response.text, conversation_labels.dict(), output_complete_flag
 
-def get_user_inputs_from_chat_model(chat_model, user_msg=''):
-    chat_history = ''
+
+def get_user_inputs_from_chat_model(chat_model, user_msg=""):
+    chat_history = ""
     for msg in chat_model.history[2:]:
-        if msg.role == 'user':
-            chat_history += msg.parts[0].text + '\n\n'
+        if msg.role == "user":
+            chat_history += msg.parts[0].text + "\n\n"
 
-    chat_history += f'{user_msg} \n\n'
+    chat_history += f"{user_msg} \n\n"
 
     return chat_history
+
 
 def prepare_output_dict(conversation_labels, diary_entry_summary):
     output_dict = conversation_labels.dict()
 
-    output_dict['entry'] = uuid.uuid4()
-    output_dict['entry_date'] = datetime.now().strftime("%Y-%m-%d")
-    output_dict['entry_title'] = diary_entry_summary.entry_title
-    output_dict['entry_content'] = diary_entry_summary.entry_summary
+    output_dict["entry"] = uuid.uuid4()
+    output_dict["entry_date"] = datetime.now().strftime("%Y-%m-%d")
+    output_dict["entry_title"] = diary_entry_summary.entry_title
+    output_dict["entry_content"] = diary_entry_summary.entry_summary
 
     return output_dict
