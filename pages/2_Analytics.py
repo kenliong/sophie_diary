@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from textblob import TextBlob
 
 # Load the data
-file_path = 'data/journal_entries_analytics.csv'
+file_path = 'data/journal_entries_v4.csv'
 data = pd.read_csv(file_path)
 
 # Convert entry_date to datetime
