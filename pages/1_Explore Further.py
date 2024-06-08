@@ -8,7 +8,6 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from agent_chain import generate_initial_prompts
-from utils import get_custom_css_modifier
 from agent_chain import summary_prompts
 
 result_topic, result_insights = summary_prompts()
@@ -19,7 +18,7 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 st.set_page_config(
     page_title="Template Chatbot", page_icon="💬", layout="wide", initial_sidebar_state="expanded"
 )
-st.markdown(get_custom_css_modifier(), unsafe_allow_html=True)
+#st.markdown(get_custom_css_modifier(), unsafe_allow_html=True)
 
 st.markdown("<h5 style='text-align: left;'>💬 Template Chatbot</h5>", unsafe_allow_html=True)
 st.title("Sophie's Diary - Explore Further")
