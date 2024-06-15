@@ -24,12 +24,12 @@ def get_db_context(user_chat):
     db = jq.get_db(embeddings)
     
     ## Commenting out for now, just going to do a search with the user's chat input
-    # prompt = pt.get_topics_from_user_chat()
-    # model = ChatGoogleGenerativeAI(model='gemini-pro')
-    # chain = LLMChain(llm=model, prompt=prompt)
-    # topics = chain.run({"user_chat": user_chat})
+    prompt = pt.get_topics_from_user_chat()
+    model = ChatGoogleGenerativeAI(model='gemini-pro')
+    chain = LLMChain(llm=model, prompt=prompt)
+    topics = chain.run({"user_chat": user_chat})
 
-    docs, sims = jq.get_docs_with_query(db, user_chat, num_of_docs=4, score_threshold=0)
+    docs, sims = jq.get_docs_with_query(db, topics, num_of_docs=4, score_threshold=0)
     db_context_string = jq.format_docs(docs, sims)
     return db_context_string
 
