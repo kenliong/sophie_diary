@@ -10,7 +10,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 
 import utils.journal_query as jq
 import utils.prompt_templates as pt
-from parse_sahha_score import main
+from utils.parse_sahha_score import main
 from utils.prompt_templates import *
 
 load_dotenv()

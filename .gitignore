@@ -4,5 +4,3 @@ __pycache__
 .idea/
 playground_kenny.py
 embeddings_sandbox.py
-.data/
-./faiss_index/*
