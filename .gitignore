@@ -4,3 +4,4 @@ __pycache__
 .idea/
 playground_kenny.py
 embeddings_sandbox.py
+.streamlit/secrets.toml
