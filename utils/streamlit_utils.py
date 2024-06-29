@@ -42,7 +42,7 @@ def enable_explore_further():
     chat_model = get_llm_chat_instance(
         get_chatbot_system_prompt(
             sahha_insights=get_sahha_insights(1,1),
-            similar_issues=get_db_context(initial_entry)
+            similar_issues=get_db_context(st.session_state["authenticated_user"], initial_entry)
         )
     )
     st.session_state["chat_model"] = chat_model

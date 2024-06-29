@@ -143,7 +143,6 @@ The user had previously discussed these issues, you may reference these issues i
         '''.strip()
     
     prompt = f"""
-You are a therapist psychologist.
 {sahha_insights_output}
 {similar_issues_str}
 

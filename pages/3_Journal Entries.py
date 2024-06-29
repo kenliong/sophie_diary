@@ -1,10 +1,13 @@
 import streamlit as st
 import pandas as pd
 
+if st.session_state["authenticated"] == False:
+    st.title(f'Please login in the "main" tab first')
+    st.stop()
+st.title(f'Journal App of {st.session_state["authenticated_user"]}')
 
-st.title('Journal App')
 
-file_path = 'data/journal_entries_v4.csv'
+file_path = st.session_state["user_journal_path"]
 data = pd.read_csv(file_path)
 data['emotions'] = data['emotions'].apply(lambda x: x.replace("'", ""))
 data['emotions'] = data['emotions'].apply(lambda x: x.replace("[", ""))

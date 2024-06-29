@@ -8,11 +8,14 @@ import plotly.graph_objects as go
 from textblob import TextBlob
 from utils.llm_utils import get_sahha_insights
 
+if st.session_state["authenticated"]  == False:
+    st.title(f'Please login in the "main" tab first')
+    st.stop()
 
 sahha_prompt, well_being_score = get_sahha_insights(1,1)
 
 # Load the data
-file_path = 'data/journal_entries_v4.csv'
+file_path = st.session_state["user_journal_path"]
 data = pd.read_csv(file_path)
 data['emotions'] = data['emotions'].apply(lambda x: x.replace("'", ""))
 data['emotions'] = data['emotions'].apply(lambda x: x.replace("[", ""))
@@ -46,16 +49,16 @@ fig_emotions_count = px.bar(emotions_count, labels={'index': 'Emotions', 'value'
 st.plotly_chart(fig_emotions_count)
 
 # Word cloud of key topics
-st.header("Word Cloud of Key Topics")
-key_topics = ' '.join(data['key_topics'].dropna().tolist())
-wordcloud = WordCloud(width=800, height=400, background_color='white').generate(key_topics)
-st.image(wordcloud.to_array(), use_column_width=True)
+# st.header("Word Cloud of Key Topics")
+# key_topics = ' '.join(data['key_topics'].dropna().tolist())
+# wordcloud = WordCloud(width=800, height=400, background_color='white').generate(key_topics)
+# st.image(wordcloud.to_array(), use_column_width=True)
 
 # Word cloud of mental tendencies
-st.header("Word Cloud of Mental Tendencies")
-mental_tendencies = ' '.join(data['mental_tendencies'].dropna().tolist())
-wordcloud = WordCloud(width=800, height=400, background_color='white').generate(mental_tendencies)
-st.image(wordcloud.to_array(), use_column_width=True)
+# st.header("Word Cloud of Mental Tendencies")
+# mental_tendencies = ' '.join(data['mental_tendencies'].dropna().tolist())
+# wordcloud = WordCloud(width=800, height=400, background_color='white').generate(mental_tendencies)
+# st.image(wordcloud.to_array(), use_column_width=True)
 
 # Heatmap of emotions over time
 st.header("Heatmap of Emotions Over Time")

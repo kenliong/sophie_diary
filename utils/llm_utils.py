@@ -10,26 +10,26 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGener
 
 import utils.journal_query as jq
 import utils.prompt_templates as pt
-from parse_sahha_score import main
+from utils.parse_sahha_score import main
 from utils.prompt_templates import *
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 
-def get_db_context(user_chat):
+def get_db_context(user, user_chat):
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/text-embedding-004"
     )  # this should be abstracted later
-    db = jq.get_db(embeddings)
+    db = jq.get_db(user, embeddings)
     
     ## Commenting out for now, just going to do a search with the user's chat input
-    # prompt = pt.get_topics_from_user_chat()
-    # model = ChatGoogleGenerativeAI(model='gemini-pro')
-    # chain = LLMChain(llm=model, prompt=prompt)
-    # topics = chain.run({"user_chat": user_chat})
+    prompt = pt.get_topics_from_user_chat()
+    model = ChatGoogleGenerativeAI(model='gemini-pro')
+    chain = LLMChain(llm=model, prompt=prompt)
+    topics = chain.run({"user_chat": user_chat})
 
-    docs, sims = jq.get_docs_with_query(db, user_chat, num_of_docs=4, score_threshold=0)
+    docs, sims = jq.get_docs_with_query(db, topics, num_of_docs=4, score_threshold=0)
     db_context_string = jq.format_docs(docs, sims)
     return db_context_string
 

@@ -4,3 +4,6 @@ __pycache__
 .idea/
 playground_kenny.py
 embeddings_sandbox.py
+.streamlit/secrets.toml
+faiss_index/*
+data/journal_entries/*.csv
