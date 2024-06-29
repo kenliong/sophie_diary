@@ -17,11 +17,11 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 
-def get_db_context(user_chat):
+def get_db_context(user, user_chat):
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/text-embedding-004"
     )  # this should be abstracted later
-    db = jq.get_db(embeddings)
+    db = jq.get_db(user, embeddings)
     
     ## Commenting out for now, just going to do a search with the user's chat input
     prompt = pt.get_topics_from_user_chat()

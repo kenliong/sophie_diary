@@ -2,9 +2,9 @@ import warnings
 from langchain_community.vectorstores import FAISS
 import json
 
-def get_db(embeddings):
+def get_db(user, embeddings):
     db = FAISS.load_local(
-        "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
+        f'faiss_index/{user}', embeddings=embeddings, allow_dangerous_deserialization=True
         )
     return db     
     

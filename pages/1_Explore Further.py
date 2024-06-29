@@ -5,6 +5,7 @@
 import os
 import google.generativeai as genai
 import streamlit as st
+import utils.journal_query as jq
 from dotenv import load_dotenv
 
 #from agent_chain import generate_initial_prompts
@@ -16,6 +17,10 @@ from langchain.prompts import PromptTemplate
 from utils.llm_utils import get_sahha_insights
 
 #result_topic, result_insights = summary_prompts()
+
+if st.session_state["authenticated"]  == False:
+    st.title(f'Please login in the "main" tab first')
+    st.stop()
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -34,9 +39,11 @@ st.subheader("Actionable Insights")
 
 model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3)
 embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-vector_store = FAISS.load_local(
-    "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
-)
+# vector_store = FAISS.load_local(
+#     f'faiss_index/{st.session_state["authenticated_user"]}', embeddings=embeddings, allow_dangerous_deserialization=True
+# )
+vector_store = jq.get_db(st.session_state["authenticated_user"], embeddings)
+
 # context is part of the vector store
 past_entries = vector_store.search(" ", search_type="similarity", k=4)
 context = "\n".join(entry.page_content for entry in past_entries)

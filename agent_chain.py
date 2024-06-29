@@ -9,7 +9,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmb
 
 from diary_analytics import generate_analytics_new_entry
 from new_diary_entry import *
-from old_diary_entries import old_diary_entries
+# from old_diary_entries import old_diary_entries
 from utils.llm_utils import *
 from utils.prompt_templates import *
 
@@ -122,7 +122,7 @@ def chat_with_user(user_msg):
             new_sys_prompt = get_chatbot_system_prompt(
                 additional_info="- The current state (or real outcome) that this person experienced",
                 sahha_insights=get_sahha_insights(1, 1),
-                similar_issues=get_db_context(chat_history),
+                similar_issues=get_db_context(st.session_state["authenticated_user"], chat_history),
             )
 
             st.session_state["chat_model"] = get_llm_chat_instance(new_sys_prompt, chat_model)
@@ -132,7 +132,7 @@ def chat_with_user(user_msg):
             new_sys_prompt = get_chatbot_system_prompt(
                 additional_info="- The desired state (or desired outcome, expectation) that this person expected.",
                 sahha_insights=get_sahha_insights(1, 1),
-                similar_issues=get_db_context(chat_history),
+                similar_issues=get_db_context(st.session_state["authenticated_user"], chat_history),
             )
 
             st.session_state["chat_model"] = get_llm_chat_instance(new_sys_prompt, chat_model)
@@ -143,7 +143,7 @@ def chat_with_user(user_msg):
             diary_entry_summary = summarize_new_entry(chat_model)
             output_dict = prepare_output_dict(conversation_labels, diary_entry_summary)
             st.session_state["output_complete_flag"] = "True"
-            generate_analytics_new_entry(output_dict)
+            generate_analytics_new_entry(st.session_state["authenticated_user"],output_dict)
             return (
                 "Thanks for sharing! You've finished your reflection and submitted a new diary entry.",
                 output_dict,

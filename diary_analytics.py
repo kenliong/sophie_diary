@@ -8,6 +8,7 @@ from langchain.chains import LLMChain
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+import utils.journal_query as jq
 
 from old_diary_entries import emotions, key_topics, mental_tendencies
 from utils.prompt_templates import (
@@ -90,31 +91,33 @@ def generate_analytics_old_entries(diary_entry: Dict):
     return emotions, key_topics, mental_tendencies, reflection_questions
 
 
-def add_new_diary_to_db_and_csv(diary_entry: Dict):
+def add_new_diary_to_db_and_csv(user: str, diary_entry: Dict):
     """
     Add new diary entries to the vector store and csv file
     """
-    csv_data = pd.read_csv("data/journal_entries_v4.csv")
+    csv_path = f'data/journal_entries/{user}.csv'
+    csv_data = pd.read_csv(csv_path)
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    vector_store = FAISS.load_local(
-        "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
-    )
+    # vector_store = FAISS.load_local(
+    #     "faiss_index", embeddings=embeddings, allow_dangerous_deserialization=True
+    # )
+    vector_store = jq.get_db(user, embeddings)
     diary_entry_copy = diary_entry.copy()
 
     document = Document(
         page_content=diary_entry_copy.pop("entry_content"), metadata=diary_entry_copy
     )
     vector_store.add_documents([document])
-    vector_store.save_local("faiss_index")
+    vector_store.save_local(f'faiss_index/{user}')
     print("added to vectorstore")
 
     new_row_in_csv = len(csv_data)
     csv_data.loc[new_row_in_csv] = diary_entry
-    csv_data.to_csv("data/journal_entries_v4.csv", index=False)
+    csv_data.to_csv(csv_path, index=False)
     print("added to csv")
 
 
-def generate_analytics_new_entry(output_dict: Dict):
+def generate_analytics_new_entry(user, output_dict: Dict):
     emotions = generate_emotions(output_dict)
     key_topics = generate_key_topics(output_dict)
     mental_tendencies = generate_mental_tendencies(output_dict)
@@ -124,4 +127,4 @@ def generate_analytics_new_entry(output_dict: Dict):
     output_dict["mental_tendencies"] = mental_tendencies
     output_dict["reflection_questions"] = reflection_questions
 
-    add_new_diary_to_db_and_csv(output_dict)
+    add_new_diary_to_db_and_csv(user, output_dict)
