@@ -14,7 +14,7 @@ Sophie's Diary offers personalized insights that are refined over time. Leveragi
 
 1. **Journal Entry System**: Users begin by interacting with the app. They can either input their own journal entries or respond to short prompts provided by the app if they don't have anything specific to write about. This helps users express their emotional state and explore the reasons behind their feelings.
 
-2. **Therapist LLM**: An AI-driven therapist engages with users, understanding their current and desired emotional states. The conversation continues until a sufficient amount of information has been gathered. During this process, the app provides suggestions on how users can improve their emotional well-being, especially if they are experiencing negative emotions.
+2. **Future You System**: The Future You system engages with users, understanding their current and desired emotional states. The conversation continues until a sufficient amount of information has been gathered. During this process, the app provides suggestions on how users can improve their emotional well-being, especially if they are experiencing negative emotions.
 
 3. **Data Storage and Analysis**: During the conversation, data is stored in a database to maintain a long-term history of the user's profile. The following data points are collected and analyzed:
 
@@ -41,12 +41,12 @@ Sophie's Diary offers personalized insights that are refined over time. Leveragi
 1. Start the application with `streamlit run main.py`
 2. Begin by talking about how you feel or what happened today.
 3. Click 'Submit'
-4. Interact with the Therapist LLM to discuss your feelings & desired emotional state. Once the Therapist LLM has gathered sufficient information, it will respond: "Thanks for sharing! You've finished your reflection and submitted a new diary entry" and a new journal entry would be added.
+4. Interact with the AI to discuss your feelings & desired emotional state. Once the AI has gathered sufficient information, it will respond: "Thanks for sharing! You've finished your reflection and submitted a new diary entry" and a new journal entry would be added.
 5. You can now explore the updated insights on your dashboard alongside personal actionable steps that you can take to improve yor health.
 
 ### IMPORTANT NOTE:
 
-This app is inspired by our teammate, Sophie. No mock data is used. All the data currently stored in the database are some of her past diary entries. Hence, if you notice that the AI-therapist has made some assumptions about your feelings or past experiences, it is due to the data that is currently stored. The LLM uses RAG techniques to search the database and chat with users, which will result in responses influenced by Sophie's past diaries.
+This app is inspired by our teammate, Sophie. No mock data is used. All the data currently stored in the database are some of her past diary entries. Hence, if you notice that the AI has made some assumptions about your feelings or past experiences, it is due to the data that is currently stored. The LLM uses RAG techniques to search the database and chat with users, which will result in responses influenced by Sophie's past diaries.
 
 We plan to make improvements and let other users try this app. In future iterations, each new user will have a clean database profile.
 
@@ -66,14 +66,14 @@ Integration of the Sahha API is currently not possible. As a temporary solution,
 
 Chat loop does a bunch of things:
 
-1. Initiating the conversation: The user starts a conversation with the AI therapist, talking about anything they have in mind or responding to a prompt if they don't have a specific topic.
+1. Initiating the conversation: The user starts a conversation with the AI, talking about anything they have in mind or responding to a prompt if they don't have a specific topic.
 
 2. Message evaluation: Each user message is evaluated to understand their emotional state and assess progress towards feeling better or more satisfied (desired state).
 
-   - Desired state check: The AI therapist continuously evaluates whether the user feels better or has gotten what they wanted from the conversation. Once the user has reached their desired state, it proceeds to store the diary analytics into the relational database AND vector store (FAISS). This data will be used in subsequent steps for a similarity search to provide context for future conversations.
+   - Desired state check: The AI continuously evaluates whether the user feels better or has gotten what they wanted from the conversation. Once the user has reached their desired state, it proceeds to store the diary analytics into the relational database AND vector store (FAISS). This data will be used in subsequent steps for a similarity search to provide context for future conversations.
    - Else, the conversation continues.
 
-3. Conversation is ongoing: A variety of data sources are used to construct a valid response by the Therapist LLM:
+3. Conversation is ongoing: A variety of data sources are used to construct a valid response by the AI:
 
    - Sahha Data
    - Topic Extraction: The user message undergoes topic extraction, and the extracted topics are stored in the vector store. Similarity searches are performed to find related topics from past conversations.
